@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+
+__RAINBOWPALETTE="1"
+
+function __colortext()
+{
+  echo -e " \e[$__RAINBOWPALETTE;$2m$1\e[0m"
+}
+
+function echogreen() 
+{
+  echo $(__colortext "$1" "32")
+}
+
+function echored() 
+{
+  echo $(__colortext "$1" "31")
+}
+
+function echoblue() 
+{
+  echo $(__colortext "$1" "34")
+}
+
+function echopurple() 
+{
+  echo $(__colortext "$1" "35")
+}
+
+function echoyellow() 
+{
+  echo $(__colortext "$1" "33")
+}
+
+function echocyan() 
+{
+  echo $(__colortext "$1" "36")
+}
+
+function cleanup {
+    echo -e "\n"
+    echoyellow "Exiting..."
+    exit 0
+}
+
+trap 'cleanup' SIGINT SIGTERM ERR
+
+
+# class=$(yadm config local.class)
+declare -a available_modes=("Developer" "Remote")
+
+
+PS3="Select your environment mode:"
+
+# https://unix.stackexchange.com/questions/513466/bash-ignoring-sigint-trap-when-select-loop-is-running
+set -o posix
+select d in "${available_modes[@]}"; do
+    echo "You have chosen... wisely: ${d}"
+    yadm config local.class ${d}
+    break
+done
+set +o posix
+
+
+chosen_mode=$(yadm config local.class)
+
+if [ "${chosen_mode}" = "Developer" ]; then
+
+    # install homebrew if it's missing
+    if ! command -v brew >/dev/null 2>&1; then
+        echo "Installing homebrew"
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    fi
+
+    if [ -f "$HOME/.Brewfile" ]; then
+        echo "Updating homebrew bundle"
+        brew bundle --global
+    fi
+
+elif [ "${chosen_mode}" = "Remote" ]; then
+
+    echo "Currently nothing to bootstrap for Remote!"
+
+fi
+
+
+echo "All done! Just restart your shell or source ~/.bashrc"

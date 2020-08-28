@@ -1,0 +1,245 @@
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
+# default editor to vim
+export EDITOR=vim
+
+# Eternal bash history.
+# ---------------------
+# Undocumented feature which sets the size to "unlimited".
+# http://stackoverflow.com/questions/9457233/unlimited-bash-history
+export HISTFILESIZE=
+export HISTSIZE=
+export HISTTIMEFORMAT="[%F %T] "
+# Avoid duplicates
+export HISTCONTROL=ignoredups:erasedups
+# Change the file location because certain bash sessions truncate .bash_history file upon close.
+# http://superuser.com/questions/575479/bash-history-truncated-to-500-lines-on-each-login
+export HISTFILE=~/.bash_eternal_history
+# Force prompt to write history after every command.
+# http://superuser.com/questions/20900/bash-history-loss
+PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+# When the shell exits, append to the history file instead of overwriting it
+shopt -s histappend
+# See also: https://unix.stackexchange.com/questions/1288/preserve-bash-history-in-multiple-terminal-windows
+
+# Common Aliases
+alias less='less --RAW-CONTROL-CHARS'
+alias ll="ls -alFG"
+alias untar='tar xvzf $!'
+
+# fzf fuzzy stuff
+[[ -r ~/.fzf.bash ]] && source ~/.fzf.bash
+
+# Mitsushikos Shell Customization
+MITSUHIKOS_DEFAULT_COLOR="[00m"
+MITSUHIKOS_GRAY_COLOR="[37m"
+MITSUHIKOS_PINK_COLOR="[35m"
+MITSUHIKOS_GREEN_COLOR="[32m"
+MITSUHIKOS_ORANGE_COLOR="[33m"
+MITSUHIKOS_RED_COLOR="[31m"
+MITSUHIKOS_BLUE_COLOR="[34m"
+
+if [ `id -u` == '0' ]; then
+  MITSUHIKOS_USER_COLOR=$MITSUHIKOS_RED_COLOR
+else
+  MITSUHIKOS_USER_COLOR=$MITSUHIKOS_PINK_COLOR
+fi
+
+#WT: modified this line for compatibility with vcprompt
+#MITSUHIKOS_VC_PROMPT=$' on \033[34m%n\033[00m:\033[00m%[unknown]b\033[32m'
+# MITSUHIKOS_VC_PROMPT=$' on \033[34m%n\033[00m:\033[00m%b\033[32m'
+MITSUHIKOS_VC_PROMPT=$' \033[34m%n\033[00m:\033[00m%b\033[32m%m%u'
+
+mitsuhikos_vcprompt() {
+{% if yadm.class == "Developer" %}
+  path=`pwd`
+  vcprompt -f "$MITSUHIKOS_VC_PROMPT"
+{% else %}
+  # only available in Developer mode
+  echo ""
+{% endif %}
+}
+
+mitsuhikos_lastcommandfailed() {
+  code=$?
+  if [ $code != 0 ]; then
+    echo -n $'\033[37m exited \033[31m'
+    echo -n $code
+    echo -n $'\033[37m'
+  fi
+}
+
+# NOTE: can't recall ever using this; but it's cool so keep it around for example
+# mitsuhikos_backgroundjobs() {
+#   jobs|python -c 'if 1:
+#     import sys
+#     items = ["\033[36m%s\033[37m" % x.split()[2]
+#             for x in sys.stdin.read().splitlines()]
+#     if items:
+#       if len(items) > 2:
+#         string = "%s, and %s" % (", ".join(items[:-1]), items[-1])
+#       else:
+#         string = ", ".join(items)
+#       print("\033[37m running %s" % string)
+#   '
+# }
+
+mitsuhikos_virtualenv() {
+{% if yadm.class == "Developer" %}
+  if [ x$VIRTUAL_ENV != x ]; then
+    if [[ $VIRTUAL_ENV == *.virtualenvs/* ]]; then
+      ENV_NAME=`basename "${VIRTUAL_ENV}"`
+    else
+      folder=`dirname "${VIRTUAL_ENV}"`
+      ENV_NAME=`basename "$folder"`
+    fi
+    # echo -n $' \033[37mworkon \033[31m'
+    echo -n $' \033[31m'
+    echo -n $ENV_NAME
+    echo -n $'\033[00m'
+  fi
+{% else %}
+  # only available in Developer mode
+  echo ""
+{% endif %}
+}
+
+kube_context() {
+{% if yadm.class == "Developer" %}
+  current_kube=$(kubectl config get-contexts --no-headers -o=name $(kubectl config current-context))
+  if [ "$current_kube" != "" ]; then
+    echo -n '['
+    echo -n $current_kube
+    echo -n ']'
+  fi
+{% else %}
+  # only available in Developer mode
+  echo ""
+{% endif %}
+}
+# export MITSUHIKOS_BASEPROMPT='\n\e${MITSUHIKOS_USER_COLOR}\u \
+# \e${MITSUHIKOS_GRAY_COLOR}at \e${MITSUHIKOS_ORANGE_COLOR}\h \
+# \e${MITSUHIKOS_GRAY_COLOR}in \e${MITSUHIKOS_GREEN_COLOR}\w\
+# `mitsuhikos_lastcommandfailed`\
+# \e${MITSUHIKOS_GRAY_COLOR}`mitsuhikos_vcprompt`\
+# `mitsuhikos_backgroundjobs`\
+# `mitsuhikos_virtualenv`\
+# \e${MITSUHIKOS_DEFAULT_COLOR}'
+
+export MITSUHIKOS_WESPROMPT='\n\e${MITSUHIKOS_GREEN_COLOR}\w\
+`mitsuhikos_lastcommandfailed`\
+\e${MITSUHIKOS_GRAY_COLOR}`mitsuhikos_vcprompt`\
+`mitsuhikos_virtualenv`\
+\e${MITSUHIKOS_BLUE_COLOR} `kube_context`\
+\e${MITSUHIKOS_DEFAULT_COLOR}'
+export PS1="\[\033[G\]${MITSUHIKOS_WESPROMPT}
+$ "
+
+
+# Setup brew for Linux if available
+[[ -r $HOME/.linuxbrew/bin/brew ]] && eval $($HOME/.linuxbrew/bin/brew shellenv)
+
+# ~/bin is at the top, then /usr/local/bin (because brew), then all the other bins
+export PATH="$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH"
+
+# for make
+export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
+
+
+{% if yadm.os == "Darwin" %}
+
+# Install bcomp
+which bcomp >/dev/null
+code=$?
+if [ $code != 0 ]; then
+  echo "Creating Beyond Compare commandline symlink"
+  ln -s /Applications/Beyond\ Compare.app/Contents/MacOS/bcomp /usr/local/bin/bcomp
+fi
+alias bc4="/Applications/Beyond\ Compare.app/Contents/MacOS/bcomp"
+
+# Remember my private key
+ssh-add -K 
+
+# Aliases for MacOS
+alias charm='/Applications/PyCharm.app/Contents/MacOS/pycharm'
+alias say='say -v Daniel'
+alias flushdns='sudo killall -HUP mDNSResponder'
+# use neovim
+alias vim=nvim
+
+{% endif %}
+
+{% if yadm.class == "Developer" %}
+
+#Virtualenv & vitualenvwrapper
+if [[ -r /usr/local/bin/virtualenvwrapper.sh ]]; then
+  export WORKON_HOME=$HOME/.virtualenvs
+  export VIRTUALENVWRAPPER_PYTHON="$(command \which python3)"
+  export VIRTUALENVWRAPPER_SCRIPT=/usr/local/bin/virtualenvwrapper.sh
+  source /usr/local/bin/virtualenvwrapper_lazy.sh
+  export PIP_VIRTUALENV_BASE=$WORKON_HOME
+  export PIP_RESPECT_VIRTUALENV=true
+  export VIRTUALENV_DISTRIBUTE=true #force distribute instead of easy_install
+  # don't let virtualenv show prompts by itself
+  VIRTUAL_ENV_DISABLE_PROMPT=1
+fi
+
+
+#NVM
+export NVM_DIR="$HOME/.nvm"
+. "$(brew --prefix nvm)/nvm.sh"
+
+#Node
+export PATH=$PATH:./node_modules/.bin
+export PATH=$PATH:$HOME/.nvm/versions/node/$(nvm current)/bin
+
+#Ruby
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+# Alias stuff
+alias vc=$HOME/vc
+alias lines="git ls-files | xargs cloc"
+alias dc=docker-compose
+alias d-remove-exited-containers='docker rm $(docker ps -q -f status=exited)'
+alias d-remove-exited-containers-with-volume='docker rm -v $(docker ps -q -f status=exited)'
+alias d-remove-dangling-images='docker rmi $(docker images -q --filter "dangling=true")'
+alias d-remove-dangling-volumes='docker volume rm $(docker volume ls -qf dangling=true)'
+alias d-remove-all-images='docker rmi $(docker images -q)'
+alias d-force-remove-all-containers='read -r -p "WARNING: You are about to force remove all containers across the system? [y/N] " response; if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then docker rm -fv $(docker ps -q); fi'
+alias cleanpy='find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf'
+
+
+# Codefresh
+alias cf='codefresh'
+codefresh completion --alias=cf bash >/usr/local/etc/bash_completion.d/_codefresh_cf
+complete -F _codefresh_completions cf
+
+# https://docs.docker.com/compose/completion/
+# brew install bash-completion
+# etc=/Applications/Docker.app/Contents/Resources/etc
+# ln -s $etc/docker.bash-completion $(brew --prefix)/etc/bash_completion.d/docker
+# ln -s $etc/docker-machine.bash-completion $(brew --prefix)/etc/bash_completion.d/docker-machine
+# ln -s $etc/docker-compose.bash-completion $(brew --prefix)/etc/bash_completion.d/docker-compose
+complete -F _docker_compose dc # this makes our dc alias also give prompts
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+. $(brew --prefix)/etc/bash_completion
+fi
+
+# The next line updates PATH for the Google Cloud SDK.
+[[ -r $HOME/google-cloud-sdk/path.bash.inc ]] && . $HOME/google-cloud-sdk/path.bash.inc
+
+# The next line enables shell command completion for gcloud.
+[[ -r $HOME/google-cloud-sdk/completion.bash.inc ]] && . "$HOME/google-cloud-sdk/completion.bash.inc"
+
+# Stern completion
+source <(stern --completion=bash)
+
+{% endif %}
+
+
+# If the decisio bash files exsit, then source them
+[[ -r $HOME/.bash_decisio_other ]] && . $HOME/.bash_decisio_other
+[[ -r $HOME/.bash_decisio ]] && . $HOME/.bash_decisio
+[[ -r $HOME/.bash_decisio_k8s ]] && . $HOME/.bash_decisio_k8s

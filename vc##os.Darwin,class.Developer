@@ -1,0 +1,25 @@
+#!/bin/bash
+
+rev=$1
+
+if [ $# -eq 0 ]
+    then
+    rev=$(git rev-parse --short HEAD)
+    
+fi
+echo 'Viewing rev '$rev
+
+remote=$(git config --get remote.origin.url)
+remote=${remote/git@/}
+remote=${remote/:/\/}
+if [[ $remote == *"github.com"* ]]
+    then
+    #github uses commit
+    remote=${remote/.git/\/commit}
+else
+    remote=${remote/.git/\/commits}
+fi
+
+remote=https://$remote/$rev
+echo $remote
+open $remote

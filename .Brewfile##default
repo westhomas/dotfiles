@@ -1,0 +1,5 @@
+brew "fzf"
+brew "gettext"
+brew "git"
+brew "git-extras"
+brew "jq"
