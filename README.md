@@ -10,12 +10,12 @@ I use [yadm](https://yadm.io/), a great Dotfiles management tool. This repo requ
 First, install yadm:
 
 ```
-$ curl -fLo /usr/local/bin/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm && chmod a+x /usr/local/bin/yadm
+curl -fLo /usr/local/bin/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm && chmod a+x /usr/local/bin/yadm
 ```
 
 Then, clone dotfiles:
 ```
-$ yadm clone https://github.com/westhomas/dotfiles.git
+yadm clone https://github.com/westhomas/dotfiles.git
 ```
 
 You will be prompted to bootstrap. Choose `y` to continue the setup process. You will then be prompted to choose your environment mode.
@@ -30,6 +30,6 @@ You will be prompted to bootstrap. Choose `y` to continue the setup process. You
 If you ever wish to change your environment mode, just run bootstrap again:
 
 ```
-$ ~/.config/yadm/bootstrap
+~/.config/yadm/bootstrap
 ```
 
