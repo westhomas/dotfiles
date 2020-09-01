@@ -69,6 +69,8 @@ chosen_mode=$(yadm config local.class)
 if ! command -v brew >/dev/null 2>&1; then
     echo "Installing homebrew"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    # we need these available to use brew below, but their .bashrc will have it in each new shell
+    eval $($HOME/.linuxbrew/bin/brew shellenv)
 fi
 
 if [ -f "$HOME/.Brewfile" ]; then
