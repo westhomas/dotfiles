@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+set -e
+
+
 __RAINBOWPALETTE="1"
 
 function __colortext()
@@ -50,45 +53,58 @@ trap 'cleanup' SIGINT SIGTERM ERR
 declare -a available_modes=("Developer" "Remote")
 
 
+echogreen "Choose only one. You must choose. But choose wisely."
 PS3="Select your environment mode:"
-
 # https://unix.stackexchange.com/questions/513466/bash-ignoring-sigint-trap-when-select-loop-is-running
 set -o posix
 select d in "${available_modes[@]}"; do
-    echo "You have chosen... wisely: ${d}"
+    echocyan "You have chosen... wisely: ${d}"
     yadm config local.class ${d}
+    chosen_mode=$(yadm config local.class)
     break
 done
 set +o posix
 
-
-chosen_mode=$(yadm config local.class)
-
+# Install apt-get packages
+system_type=$(uname -s)
+if [[ "$system_type" = "Linux" && -r "$HOME/requirements.apt-get" ]]; then
+	echo -e "You have a requirements.apt-get file"
+	echogreen "Would you like to install these packages? (Y/n): "
+	read prompt
+	if [[ "${prompt}" == 'Y' || "${prompt}" == 'y' || "${prompt}" == '' ]]; then
+    echoyellow "Updating apt-get bundle"
+    < requirements.apt-get xargs sudo apt-get install -y
+  fi
+fi
 
 # install homebrew if it's missing
 if ! command -v brew >/dev/null 2>&1; then
-    echo "Installing homebrew"
+    echoyellow "Installing homebrew"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
     # we need these available to use brew below, but their .bashrc will have it in each new shell
     eval $($HOME/.linuxbrew/bin/brew shellenv)
 fi
 
-if [ -f "$HOME/.Brewfile" ]; then
-    echo "Updating homebrew bundle"
+if [[ -f "$HOME/.Brewfile" ]]; then
+    echoyellow "Updating homebrew bundle"
     brew bundle --global
 fi
 
-
-if [ "${chosen_mode}" = "Developer" ]; then
+# More bootstrapy things
+if [[ "${chosen_mode}" = "Developer" ]]; then
 
   # https://docs.docker.com/compose/completion/
   if command -v docker-compose >/dev/null 2>&1; then
     [[ ! -r "$(brew --prefix)/etc/bash_completion.d/docker-compose" ]] && curl -L https://raw.githubusercontent.com/docker/compose/1.26.2/contrib/completion/bash/docker-compose -o $(brew --prefix)/etc/bash_completion.d/docker-compose
   fi
 
-elif [ "${chosen_mode}" = "Remote" ]; then
+elif [[ "${chosen_mode}" = "Remote" ]]; then
     echo "Currently nothing else bootstrap for Remote!"
 fi
 
-
+# Rewards
+if command -v figlet >/dev/null 2>&1 && command -v lolcat >/dev/null 2>&1; then
+  echo "Watch out." | figlet | lolcat
+  echo "We got a developer over here." | figlet | lolcat
+fi
 echo "All done! Just restart your shell or source ~/.bashrc"

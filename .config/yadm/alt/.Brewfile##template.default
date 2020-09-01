@@ -1,4 +1,3 @@
-brew "fzf"
 brew "git"
 brew "fzf"
 brew "jq"
