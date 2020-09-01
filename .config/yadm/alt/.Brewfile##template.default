@@ -4,6 +4,7 @@ brew "fzf"
 brew "jq"
 brew "tree"
 brew "wget"
+brew "vcprompt"
 {% if yadm.class == "Developer" %}
 tap "codefresh-io/cli"
 tap "datawire/blackbird"

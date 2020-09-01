@@ -107,11 +107,13 @@ mitsuhikos_virtualenv() {
 
 kube_context() {
 {% if yadm.class == "Developer" %}
-  current_kube=$(kubectl config get-contexts --no-headers -o=name $(kubectl config current-context))
-  if [ "$current_kube" != "" ]; then
-    echo -n '['
-    echo -n $current_kube
-    echo -n ']'
+  if command -v kubectl >/dev/null 2>&1; then
+    current_kube=$(kubectl config get-contexts --no-headers -o=name $(kubectl config current-context))
+    if [ "$current_kube" != "" ]; then
+      echo -n '['
+      echo -n $current_kube
+      echo -n ']'
+    fi
   fi
 {% else %}
   # only available in Developer mode
