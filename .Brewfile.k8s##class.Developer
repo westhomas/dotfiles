@@ -1,0 +1,4 @@
+brew "stern"
+brew "helm"
+brew "datawire/blackbird/telepresence"
+brew "minikube"

@@ -64,24 +64,24 @@ set +o posix
 
 chosen_mode=$(yadm config local.class)
 
-if [ "${chosen_mode}" = "Developer" ]; then
 
-    # install homebrew if it's missing
-    if ! command -v brew >/dev/null 2>&1; then
-        echo "Installing homebrew"
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-    fi
-
-    if [ -f "$HOME/.Brewfile" ]; then
-        echo "Updating homebrew bundle"
-        brew bundle --global
-    fi
-
-elif [ "${chosen_mode}" = "Remote" ]; then
-
-    echo "Currently nothing to bootstrap for Remote!"
-
+# install homebrew if it's missing
+if ! command -v brew >/dev/null 2>&1; then
+    echo "Installing homebrew"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 fi
+
+if [ -f "$HOME/.Brewfile" ]; then
+    echo "Updating homebrew bundle"
+    brew bundle --global
+fi
+
+
+# if [ "${chosen_mode}" = "Developer" ]; then
+#     echo "Currently nothing to bootstrap for Developer!"
+# elif [ "${chosen_mode}" = "Remote" ]; then
+#     echo "Currently nothing to bootstrap for Remote!"
+# fi
 
 
 echo "All done! Just restart your shell or source ~/.bashrc"
