@@ -27,6 +27,8 @@ shopt -s histappend
 alias less='less --RAW-CONTROL-CHARS'
 alias ll="ls -alFG"
 alias untar='tar xvzf $!'
+where() { ll $(which $@); }
+
 
 # fzf fuzzy stuff
 [[ -r ~/.fzf.bash ]] && source ~/.fzf.bash
@@ -212,22 +214,18 @@ alias d-remove-all-images='docker rmi $(docker images -q)'
 alias d-force-remove-all-containers='read -r -p "WARNING: You are about to force remove all containers across the system? [y/N] " response; if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then docker rm -fv $(docker ps -q); fi'
 alias cleanpy='find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf'
 
+# Setup bash completion
+[[ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]] && . "$(brew --prefix)/etc/profile.d/bash_completion.sh"
 
 # Codefresh
-alias cf='codefresh'
-codefresh completion --alias=cf bash >/usr/local/etc/bash_completion.d/_codefresh_cf
-complete -F _codefresh_completions cf
-
-# https://docs.docker.com/compose/completion/
-# brew install bash-completion
-# etc=/Applications/Docker.app/Contents/Resources/etc
-# ln -s $etc/docker.bash-completion $(brew --prefix)/etc/bash_completion.d/docker
-# ln -s $etc/docker-machine.bash-completion $(brew --prefix)/etc/bash_completion.d/docker-machine
-# ln -s $etc/docker-compose.bash-completion $(brew --prefix)/etc/bash_completion.d/docker-compose
-complete -F _docker_compose dc # this makes our dc alias also give prompts
-if [ -f $(brew --prefix)/etc/bash_completion ]; then
-. $(brew --prefix)/etc/bash_completion
+if command -v codefresh >/dev/null 2>&1; then
+  alias cf='codefresh'
+  codefresh completion --alias=cf bash > "$(brew --prefix)/etc/bash_completion.d/_codefresh_cf"
+  complete -F _codefresh_completions cf
 fi
+
+# this makes our dc alias also give prompts
+[[ -r "$(brew --prefix)/etc/bash_completion.d/docker-compose" ]] && complete -F _docker_compose dc
 
 # The next line updates PATH for the Google Cloud SDK.
 [[ -r $HOME/google-cloud-sdk/path.bash.inc ]] && . $HOME/google-cloud-sdk/path.bash.inc
@@ -236,7 +234,9 @@ fi
 [[ -r $HOME/google-cloud-sdk/completion.bash.inc ]] && . "$HOME/google-cloud-sdk/completion.bash.inc"
 
 # Stern completion
-source <(stern --completion=bash)
+if command -v stern >/dev/null 2>&1; then
+  source <(stern --completion=bash)
+fi
 
 {% endif %}
 

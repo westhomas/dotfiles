@@ -79,11 +79,16 @@ if [ -f "$HOME/.Brewfile" ]; then
 fi
 
 
-# if [ "${chosen_mode}" = "Developer" ]; then
-#     echo "Currently nothing to bootstrap for Developer!"
-# elif [ "${chosen_mode}" = "Remote" ]; then
-#     echo "Currently nothing to bootstrap for Remote!"
-# fi
+if [ "${chosen_mode}" = "Developer" ]; then
+
+  # https://docs.docker.com/compose/completion/
+  if command -v docker-compose >/dev/null 2>&1; then
+    [[ ! -r "$(brew --prefix)/etc/bash_completion.d/docker-compose" ]] && curl -L https://raw.githubusercontent.com/docker/compose/1.26.2/contrib/completion/bash/docker-compose -o $(brew --prefix)/etc/bash_completion.d/docker-compose
+  fi
+
+elif [ "${chosen_mode}" = "Remote" ]; then
+    echo "Currently nothing else bootstrap for Remote!"
+fi
 
 
 echo "All done! Just restart your shell or source ~/.bashrc"
