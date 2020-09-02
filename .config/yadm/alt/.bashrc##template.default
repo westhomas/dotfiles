@@ -185,11 +185,11 @@ alias vim=nvim
 {% if yadm.class == "Developer" %}
 
 #Virtualenv & vitualenvwrapper
-if [[ -r /usr/local/bin/virtualenvwrapper.sh ]]; then
+if [[ -r $(brew --prefix)/bin/virtualenvwrapper.sh ]]; then
   export WORKON_HOME=$HOME/.virtualenvs
   export VIRTUALENVWRAPPER_PYTHON="$(command \which python3)"
-  export VIRTUALENVWRAPPER_SCRIPT=/usr/local/bin/virtualenvwrapper.sh
-  source /usr/local/bin/virtualenvwrapper_lazy.sh
+  export VIRTUALENVWRAPPER_SCRIPT=$(brew --prefix)/bin/virtualenvwrapper.sh
+  source $(brew --prefix)/bin/virtualenvwrapper_lazy.sh
   export PIP_VIRTUALENV_BASE=$WORKON_HOME
   export PIP_RESPECT_VIRTUALENV=true
   export VIRTUALENV_DISTRIBUTE=true #force distribute instead of easy_install

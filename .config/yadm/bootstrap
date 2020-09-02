@@ -72,8 +72,8 @@ set +o posix
 # Install apt-get packages
 system_type=$(uname -s)
 if [[ "$system_type" = "Linux" && -r "$HOME/.requirements.apt-get" ]]; then
-	echo -e "You have a .requirements.apt-get file"
-	echogreen "Would you like to install these packages? (Y/n): "
+	echo -e ".requirements.apt-get file detected..."
+	echogreen "Would you like to install these apt-get packages? (Y/n): "
 	read prompt
 	if [[ "${prompt}" == 'Y' || "${prompt}" == 'y' || "${prompt}" == '' ]]; then
     echoyellow "Updating apt-get bundle"
@@ -83,26 +83,38 @@ fi
 
 # Install homebrew if it's missing
 if ! command -v brew >/dev/null 2>&1; then
-  echoyellow "Installing homebrew"
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-  # we need these available to use brew below, but their .bashrc will have it in each new shell
-  eval $($HOME/.linuxbrew/bin/brew shellenv)
+  echo -e "No homebrew detected..."
+  echogreen "Would you like to install homebrew? (Y/n): "
+  read prompt
+  if [[ "${prompt}" == 'Y' || "${prompt}" == 'y' || "${prompt}" == '' ]]; then
+    echoyellow "Installing homebrew"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    # we need these available to use brew below, but their .bashrc will have it in each new shell
+    eval $($HOME/.linuxbrew/bin/brew shellenv)
+  fi
 fi
 
 # Install their brew packages
 if [[ -r "$HOME/.Brewfile" ]]; then
-  echoyellow "Updating homebrew bundle"
-  brew bundle --global
+  echo -e ".Brewfile detected..."
+  echogreen "Would you like to install these brew packages? (Y/n): "
+  read prompt
+  if [[ "${prompt}" == 'Y' || "${prompt}" == 'y' || "${prompt}" == '' ]]; then
+    echoyellow "Updating homebrew bundle"
+    brew bundle --global
+  fi
 fi
 
-# Install python pips if there's a python
-if [[ command -v python >/dev/null 2>&1 && -r "$HOME/.requirements.pip"]]; then
-	echo -e "You have a .requirements.pip file"
-	echogreen "Would you like to install these python pips? (Y/n): "
-	read prompt
-	if [[ "${prompt}" == 'Y' || "${prompt}" == 'y' || "${prompt}" == '' ]]; then
-    echoyellow "Updating pip bundle"
-    python install -r "$HOME/.requirements.pip"
+# Install python pips if there's a python3
+if command -v python3 >/dev/null 2>&1; then
+  if [[ -r "$HOME/.requirements.pip" ]]; then
+    echo -e ".requirements.pip file detected..."
+    echogreen "Would you like to install these python pips? (Y/n): "
+    read prompt
+    if [[ "${prompt}" == 'Y' || "${prompt}" == 'y' || "${prompt}" == '' ]]; then
+      echoyellow "Updating pip bundle"
+      pip3 install -r "$HOME/.requirements.pip"
+    fi
   fi
 fi
 
@@ -113,6 +125,18 @@ if [[ "${chosen_mode}" = "Developer" ]]; then
   # https://docs.docker.com/compose/completion/
   if command -v docker-compose >/dev/null 2>&1; then
     [[ ! -r "$(brew --prefix)/etc/bash_completion.d/docker-compose" ]] && curl -L https://raw.githubusercontent.com/docker/compose/1.26.2/contrib/completion/bash/docker-compose -o $(brew --prefix)/etc/bash_completion.d/docker-compose
+  fi
+
+  if command -v python3 >/dev/null 2>&1; then
+    if [[ "$system_type" = "Linux" && -r /usr/bin/python ]]; then
+      echo -e "Python3 detected..."
+      echogreen "You have python3 installed. Would you like to remove the default system python link? (Y/n): "
+      read prompt
+      if [[ "${prompt}" == 'Y' || "${prompt}" == 'y' || "${prompt}" == '' ]]; then
+        echoyellow "Removing default python link"
+        sudo rm /usr/bin/python
+      fi
+    fi
   fi
 
 elif [[ "${chosen_mode}" = "Remote" ]]; then
