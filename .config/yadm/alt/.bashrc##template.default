@@ -145,6 +145,10 @@ export MITSUHIKOS_WESPROMPT='\n\e${MITSUHIKOS_GREEN_COLOR}\w\
 export PS1="\[\033[G\]${MITSUHIKOS_WESPROMPT}
 $ "
 
+# TODO: I don't recall why this is needed; remove it later
+# for make
+# export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
+
 {% if yadm.os == "Linux" %}
 
 # Setup brew for Linux if available
@@ -152,14 +156,10 @@ $ "
 
 {% endif %}
 
-# ~/bin is at the top, then /usr/local/bin (because brew), then all the other bins
-export PATH="$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH"
-
-# for make
-export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
-
-
 {% if yadm.os == "Darwin" %}
+
+# Setup brew for MacOS if available
+[[ -r /usr/local/bin/brew ]] && eval $(/usr/local/bin/brew shellenv)
 
 # Install bcomp
 which bcomp >/dev/null
@@ -248,6 +248,8 @@ fi
 
 {% endif %}
 
+# ~/bin is at the front because that's where yadm bootstrap installs its stuff
+export PATH="$HOME/bin:$PATH"
 
 # If the decisio bash files exsit, then source them
 [[ -r $HOME/.bash_decisio_other ]] && . $HOME/.bash_decisio_other
