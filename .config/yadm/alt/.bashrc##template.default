@@ -201,6 +201,8 @@ if [[ -r $(brew --prefix)/bin/virtualenvwrapper.sh ]]; then
   VIRTUAL_ENV_DISABLE_PROMPT=1
 fi
 
+# Java
+export PATH="$(brew --prefix)/opt/openjdk/bin:$PATH"
 
 #NVM
 export NVM_DIR="$HOME/.nvm"
