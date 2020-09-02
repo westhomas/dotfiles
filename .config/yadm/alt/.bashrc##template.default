@@ -25,7 +25,12 @@ shopt -s histappend
 
 # Common Aliases
 alias less='less --RAW-CONTROL-CHARS'
+
+{% if yadm.os == "Darwin" %}
 alias ll="ls -alFG"
+{% else %}
+alias ll="ls -alFG --color=auto"
+{% endif %}
 alias untar='tar xvzf $!'
 where() { ll $(which $@); }
 
@@ -140,9 +145,12 @@ export MITSUHIKOS_WESPROMPT='\n\e${MITSUHIKOS_GREEN_COLOR}\w\
 export PS1="\[\033[G\]${MITSUHIKOS_WESPROMPT}
 $ "
 
+{% if yadm.os == "Linux" %}
 
 # Setup brew for Linux if available
-[[ -r $HOME/.linuxbrew/bin/brew ]] && eval $($HOME/.linuxbrew/bin/brew shellenv)
+[[ -r /home/linuxbrew/.linuxbrew/bin/brew ]] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+
+{% endif %}
 
 # ~/bin is at the top, then /usr/local/bin (because brew), then all the other bins
 export PATH="$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH"

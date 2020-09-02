@@ -5,6 +5,7 @@ brew "tree"
 brew "wget"
 brew "vcprompt"
 brew "bash-completion"
+brew "screen"
 {% if yadm.class == "Developer" %}
 tap "datawire/blackbird"
 brew "gcc"
