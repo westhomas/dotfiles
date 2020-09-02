@@ -184,6 +184,10 @@ alias vim=nvim
 
 {% if yadm.class == "Developer" %}
 
+# Needed for yadm encrypt/decrypt to work
+GPG_TTY=$(tty)
+export GPG_TTY
+
 #Virtualenv & vitualenvwrapper
 if [[ -r $(brew --prefix)/bin/virtualenvwrapper.sh ]]; then
   export WORKON_HOME=$HOME/.virtualenvs

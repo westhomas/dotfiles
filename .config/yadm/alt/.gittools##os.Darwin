@@ -1,0 +1,16 @@
+[diff]
+    tool = bc4
+[difftool]
+    prompt = false
+[difftool "bc4"]
+    trustExitCode = true
+    cmd = `/usr/local/bin/bcomp -title1=HEAD -title2=HEAD~1 "$LOCAL" "$REMOTE"`
+[merge]
+    tool = bc4
+	conflictStyle = diff3
+[merge "tool"]
+    bc4 = trustExitCode
+[mergetool "bc4"]
+    cmd = `/usr/local/bin/bcomp "$PWD/$LOCAL" "$PWD/$REMOTE" "$PWD/$BASE" "$PWD/$MERGED"`
+    #keepBackup = false
+    trustExitCode = false
