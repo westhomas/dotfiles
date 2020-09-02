@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
+# stop on errors
 set -e
 
 
+# setup fancy-pants colors
 __RAINBOWPALETTE="1"
 
 function __colortext()
@@ -40,6 +42,8 @@ function echocyan()
   echo $(__colortext "$1" "36")
 }
 
+
+# cleanup and exit trapping
 function cleanup {
     echo -e "\n"
     echoyellow "Exiting..."
@@ -49,50 +53,63 @@ function cleanup {
 trap 'cleanup' SIGINT SIGTERM ERR
 
 
-# class=$(yadm config local.class)
+# prepare for asking them what mode they're in
 declare -a available_modes=("Developer" "Remote")
 
-
+# start the prompting
 echogreen "Choose only one. You must choose. But choose wisely."
 PS3="Select your environment mode:"
 # https://unix.stackexchange.com/questions/513466/bash-ignoring-sigint-trap-when-select-loop-is-running
 set -o posix
 select d in "${available_modes[@]}"; do
-    echocyan "You have chosen... wisely: ${d}"
-    yadm config local.class ${d}
-    chosen_mode=$(yadm config local.class)
-    break
+  echocyan "You have chosen... wisely: ${d}"
+  yadm config local.class ${d}
+  chosen_mode=$(yadm config local.class)
+  break
 done
 set +o posix
 
 # Install apt-get packages
 system_type=$(uname -s)
-if [[ "$system_type" = "Linux" && -r "$HOME/requirements.apt-get" ]]; then
-	echo -e "You have a requirements.apt-get file"
+if [[ "$system_type" = "Linux" && -r "$HOME/.requirements.apt-get" ]]; then
+	echo -e "You have a .requirements.apt-get file"
 	echogreen "Would you like to install these packages? (Y/n): "
 	read prompt
 	if [[ "${prompt}" == 'Y' || "${prompt}" == 'y' || "${prompt}" == '' ]]; then
     echoyellow "Updating apt-get bundle"
-    < requirements.apt-get xargs sudo apt-get install -y
+    < .requirements.apt-get xargs sudo apt-get install -y
   fi
 fi
 
-# install homebrew if it's missing
+# Install homebrew if it's missing
 if ! command -v brew >/dev/null 2>&1; then
-    echoyellow "Installing homebrew"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-    # we need these available to use brew below, but their .bashrc will have it in each new shell
-    eval $($HOME/.linuxbrew/bin/brew shellenv)
+  echoyellow "Installing homebrew"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  # we need these available to use brew below, but their .bashrc will have it in each new shell
+  eval $($HOME/.linuxbrew/bin/brew shellenv)
 fi
 
-if [[ -f "$HOME/.Brewfile" ]]; then
-    echoyellow "Updating homebrew bundle"
-    brew bundle --global
+# Install their brew packages
+if [[ -r "$HOME/.Brewfile" ]]; then
+  echoyellow "Updating homebrew bundle"
+  brew bundle --global
+fi
+
+# Install python pips if there's a python
+if [[ command -v python >/dev/null 2>&1 && -r "$HOME/.requirements.pip"]]; then
+	echo -e "You have a .requirements.pip file"
+	echogreen "Would you like to install these python pips? (Y/n): "
+	read prompt
+	if [[ "${prompt}" == 'Y' || "${prompt}" == 'y' || "${prompt}" == '' ]]; then
+    echoyellow "Updating pip bundle"
+    python install -r "$HOME/.requirements.pip"
+  fi
 fi
 
 # More bootstrapy things
 if [[ "${chosen_mode}" = "Developer" ]]; then
 
+  # Get the compose completion stuff in place
   # https://docs.docker.com/compose/completion/
   if command -v docker-compose >/dev/null 2>&1; then
     [[ ! -r "$(brew --prefix)/etc/bash_completion.d/docker-compose" ]] && curl -L https://raw.githubusercontent.com/docker/compose/1.26.2/contrib/completion/bash/docker-compose -o $(brew --prefix)/etc/bash_completion.d/docker-compose
