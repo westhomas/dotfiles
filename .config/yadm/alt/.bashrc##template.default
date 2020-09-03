@@ -229,7 +229,7 @@ alias d-force-remove-all-containers='read -r -p "WARNING: You are about to force
 alias cleanpy='find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf'
 
 # Setup bash completion
-[[ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]] && . "$(brew --prefix)/etc/profile.d/bash_completion.sh"
+[[ -r $(brew --prefix)/etc/bash_completion ]] && . $(brew --prefix)/etc/bash_completion
 
 # Codefresh
 if command -v codefresh >/dev/null 2>&1; then
