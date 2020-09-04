@@ -76,6 +76,8 @@ if [[ "$system_type" = "Linux" && -r "$HOME/.requirements.apt-get" ]]; then
 	echogreen "Would you like to install these apt-get packages? (Y/n): "
 	read prompt
 	if [[ "${prompt}" == 'Y' || "${prompt}" == 'y' || "${prompt}" == '' ]]; then
+    echoyellow "Updating apt-get package sources"
+    sudo apt-get update --fix-missing
     echoyellow "Updating apt-get bundle"
     < .requirements.apt-get xargs sudo apt-get install -y
   fi
