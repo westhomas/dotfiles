@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+usage="usage: ${0} <master interface> <up/down>"
+
+masterinterface=${1}
+updown=${2}
+
+if [ -z ${masterinterface} ]; then echo ${usage} ; exit 1; fi
+if [ -z ${updown} ]; then echo ${usage} ; exit 1; fi
+
+# the new vlan interface can be customized a bit
+newlinkid=100
+newlinkname=${masterinterface}.${newlinkid}
+
+if [ ${updown} = up ]; then
+	ip link add link ${masterinterface} name ${newlinkname} type vlan id ${newlinkid}
+	ip addr add 10.0.2.2/24 brd 10.0.2.255 dev ${newlinkname}
+	ip link set dev ${newlinkname} up
+	echo
+	ip -d addr show ${newlinkname}
+	exit 0
+elif [ ${updown} = down ]; then
+	ip link set dev ${newlinkname} down
+	ip link delete ${newlinkname}
+	exit 0
+else
+	echo "bad input"
+	exit 1
+fi
+

@@ -79,7 +79,7 @@ if [[ "$system_type" = "Linux" && -r "$HOME/.requirements.apt-get" ]]; then
     echoyellow "Updating apt-get package sources"
     sudo apt-get update --fix-missing
     echoyellow "Updating apt-get bundle"
-    < .requirements.apt-get xargs sudo apt-get install -y
+    < "$HOME/.requirements.apt-get" xargs sudo apt-get install -y
   fi
 fi
 
@@ -140,6 +140,42 @@ if [[ "${chosen_mode}" = "Developer" ]]; then
       fi
     fi
   fi
+
+if [[ "$system_type" = "Linux" ]]; then
+
+
+  # Setup dnsmasq for docker to use
+  if ! grep 10.0.2.2 /etc/hosts >/dev/null; then
+
+    echo -e "No /etc/hosts entries detected for loopback interface..."
+    echogreen "You're missing a 10.0.2.2 entry in your /etc/hosts. Would you like modify and it now? (Y/n): "
+    read prompt
+    if [[ "${prompt}" == 'Y' || "${prompt}" == 'y' || "${prompt}" == '' ]]; then
+      echoyellow "Modifying /etc/hosts"
+      sudo bash -c "echo '10.0.2.2 wes.decisio.work wes-simulator.decisio.work wes-api.decisio.work wes-mcui.decisio.work wes-mcapi.decisio.work wes-canonic.decisio.work wes-reliant.decisio.work wes-reliant-viewer.decisio.work' >> /etc/hosts"
+      echoyellow "Restarting dnsmasq"
+      sudo service dnsmasq restart
+    fi
+
+  fi
+
+  # Point docker to host loopback for dns
+  if [[ ! -r /etc/docker/daemon.json ]]; then
+
+    echo -e "No /etc/docker/daemon.json entry detected for loopback interface..."
+    echogreen "You're missing a 10.0.2.2 entry in your /etc/docker/daemon.json. Would you like modify and add it now? (Y/n): "
+    read prompt
+    if [[ "${prompt}" == 'Y' || "${prompt}" == 'y' || "${prompt}" == '' ]]; then
+      echoyellow "Modifying /etc/docker/daemon.json"
+      sudo bash -c "echo '{\"dns\": [\"10.0.2.2\", \"8.8.8.8\"]}' > /etc/docker/daemon.json"
+      echoyellow "Restarting docker"
+      sudo service docker restart
+    fi
+
+  fi
+
+fi
+
 
 elif [[ "${chosen_mode}" = "Remote" ]]; then
     echo "Currently nothing else bootstrap for Remote!"

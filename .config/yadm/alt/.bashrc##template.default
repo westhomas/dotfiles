@@ -1,6 +1,45 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
+# setup fancy-pants colors
+__RAINBOWPALETTE="1"
+
+function __colortext()
+{
+  echo -e " \e[$__RAINBOWPALETTE;$2m$1\e[0m"
+}
+
+function echogreen() 
+{
+  echo $(__colortext "$1" "32")
+}
+
+function echored() 
+{
+  echo $(__colortext "$1" "31")
+}
+
+function echoblue() 
+{
+  echo $(__colortext "$1" "34")
+}
+
+function echopurple() 
+{
+  echo $(__colortext "$1" "35")
+}
+
+function echoyellow() 
+{
+  echo $(__colortext "$1" "33")
+}
+
+function echocyan() 
+{
+  echo $(__colortext "$1" "36")
+}
+
+
 # default editor to vim
 export EDITOR=vim
 
@@ -257,7 +296,23 @@ fi
 # ~/bin is at the front because that's where yadm bootstrap installs its stuff
 export PATH="$HOME/bin:$PATH"
 
-# If the decisio bash files exsit, then source them
+# If the decisio bash files exists, then source them
 [[ -r $HOME/.bash_decisio_other ]] && . $HOME/.bash_decisio_other
 [[ -r $HOME/.bash_decisio ]] && . $HOME/.bash_decisio
 [[ -r $HOME/.bash_decisio_k8s ]] && . $HOME/.bash_decisio_k8s
+
+
+{% if yadm.os == "Linux" %}
+
+# Setup vlan loopback interface for linux machines
+if ! ip link show ens33.100 >/dev/null; then
+  echogreen "You don't have the vlan loopback setup. Would you like to create it now? (Y/n): "
+  read prompt
+  if [[ "${prompt}" == 'Y' || "${prompt}" == 'y' || "${prompt}" == '' ]]; then
+    echoyellow "Setting up vlan..."
+    sudo $HOME/vlan.sh ens33 up
+    sudo service dnsmasq restart
+  fi
+fi
+
+{% endif %}

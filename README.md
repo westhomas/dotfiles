@@ -10,7 +10,7 @@ I use [yadm](https://yadm.io/), a great Dotfiles management tool. This repo requ
 First, you'll need full permissions to `/usr/local`:
 
 ```
-chown -R $(whoami) /usr/local/
+sudo chown -R $(whoami) /usr/local/
 ```
 
 
