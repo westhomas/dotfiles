@@ -72,7 +72,7 @@ alias ll="ls -alFG --color=auto"
 {% endif %}
 alias untar='tar xvzf $!'
 where() { ll $(which $@); }
-
+alias isleep='$HOME/isleep'
 
 # fzf fuzzy stuff
 [[ -r ~/.fzf.bash ]] && source ~/.fzf.bash

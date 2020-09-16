@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+function __colortext()
+{
+  echo -e " \e[$__RAINBOWPALETTE;$2m$1\e[0m"
+}
+
+function echoyellow() 
+{
+  echo $(__colortext "$1" "33")
+}
+
+function cleanup {
+    echo -e "\n"
+    echoyellow "You short-circuited the sleep!"
+    exit 0
+}
+
+# trap Ctrl+C so they can stop the sleeping without exiting the whole process
+trap 'cleanup' SIGINT
+
+echo "Sleeping for $*... (Ctrl+C to end sleep)"
+sleep $*
+
+exit 0
