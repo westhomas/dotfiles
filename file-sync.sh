@@ -26,4 +26,4 @@ SYNC_PATH=$1
 SYNC_DEST_HOST=$2
 DEST_PATH=$3
 
-fswatch -0 -or ${SYNC_PATH} | xargs -0 -n 1 -I {} -- rsync -av --delete ${SYNC_PATH} ${SYNC_DEST_HOST}:${DEST_PATH}
+fswatch -0 -or ${SYNC_PATH} | xargs -0 -n 1 -I {} -- rsync -av --delete --exclude-from=.file-sync-excluded ${SYNC_PATH} ${SYNC_DEST_HOST}:${DEST_PATH}
