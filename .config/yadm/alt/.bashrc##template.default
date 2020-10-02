@@ -73,6 +73,9 @@ alias ll="ls -alFG --color=auto"
 alias untar='tar xvzf $!'
 where() { ll $(which $@); }
 alias isleep='$HOME/isleep'
+alias timestamp='python -c '\''import time;print(int(round(time.time() * 1000)))'\'''
+alias uuid='python -c '\''import uuid; print(uuid.uuid4())'\'''
+alias uuidhex='python -c '\''import uuid; print(uuid.uuid4().hex)'\'''
 
 # fzf fuzzy stuff
 [[ -r ~/.fzf.bash ]] && source ~/.fzf.bash
