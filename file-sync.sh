@@ -21,9 +21,23 @@
 #  -       xargs -I {} will substitute occurrences of {} in command with the parsed argument.  If the command you are running does not need
 #          the event path name, just delete this option.  If you prefer using another replacement string, substitute {} with yours.
 
+if [[ ! -f .file-sync-excluded ]]; then 
+    echo "Creating default .file-sync-excluded"
+    echo "# put your ignore list here; nothing specified yet" > .file-sync-excluded
+else
+    echo "Ignoring these files:"
+    cat .file-sync-excluded
+fi
+
 
 SYNC_PATH=$1
 SYNC_DEST_HOST=$2
 DEST_PATH=$3
 
-fswatch -0 -or ${SYNC_PATH} | xargs -0 -n 1 -I {} -- rsync -av --delete --exclude-from=.file-sync-excluded ${SYNC_PATH} ${SYNC_DEST_HOST}:${DEST_PATH}
+
+echo "Testing file sync in 2 seconds..." && sleep 2 && touch ${SYNC_PATH}/test-sync-file.deleteme && sleep 2 && rm ${SYNC_PATH}/test-sync-file.deleteme && echo "Test completed." &
+
+echo "Watching for files to sync..."
+
+# -e "ssh -o StrictHostKeyChecking no"
+fswatch -0 -orav ${SYNC_PATH} | xargs -0 -n 1 -I {} -- rsync -av --delete --exclude-from=.file-sync-excluded ${SYNC_PATH} ${SYNC_DEST_HOST}:${DEST_PATH}
