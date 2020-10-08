@@ -1,5 +1,6 @@
+# NOTE: disabling because this causes problems when doing ssh stuff
 # If not running interactively, don't do anything
-[ -z "$PS1" ] && return
+# [ -z "$PS1" ] && return
 
 # setup fancy-pants colors
 __RAINBOWPALETTE="1"
