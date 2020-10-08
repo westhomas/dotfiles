@@ -179,6 +179,7 @@ if [[ "${chosen_mode}" = "Developer" ]]; then
         sudo bash -c "echo '10.0.2.2 wes.decisio.work wes-simulator.decisio.work wes-api.decisio.work wes-mcui.decisio.work wes-mcapi.decisio.work wes-canonic.decisio.work wes-reliant.decisio.work wes-reliant-viewer.decisio.work' >> /etc/hosts"
         echoyellow "Restarting dnsmasq"
         sudo service dnsmasq restart
+        ping -c 1 wes.decisio.work
       fi
 
     fi
@@ -194,6 +195,7 @@ if [[ "${chosen_mode}" = "Developer" ]]; then
         sudo bash -c "echo '{\"dns\": [\"10.0.2.2\", \"8.8.8.8\"]}' > /etc/docker/daemon.json"
         echoyellow "Restarting docker"
         sudo service docker restart
+        docker run --rm -it busybox ping wes.decisio.work
       fi
 
     fi
