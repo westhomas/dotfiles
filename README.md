@@ -7,7 +7,16 @@ I use [yadm](https://yadm.io/), a great Dotfiles management tool. This repo requ
 
 ## Bootstrap
 
-First, you'll need full permissions to `/usr/local`:
+First, you should have access to sudo and have curl and git installed:
+
+```
+su -
+usermod -aG sudo $(whoami)
+sudo apt-get install curl git
+```
+
+
+Then, you'll need full permissions to `/usr/local`:
 
 ```
 sudo chown -R $(whoami) /usr/local/
