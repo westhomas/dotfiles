@@ -149,6 +149,9 @@ if [[ "${chosen_mode}" = "Developer" ]]; then
         sudo usermod -aG docker $USER
         docker --version
         rm get-docker.sh
+
+        echored "You need to logout and log back in. After login, you can restart the bootstrap process with: yadm bootstrap"
+
       fi
     fi
 
