@@ -32,6 +32,7 @@ brew "tree"
 brew "sysbench"
 brew "python@3.8"
 brew "rsync"
+brew "bat"
 {% endif %}
 {% if yadm.os == "Darwin" %}
 tap "homebrew/cask"

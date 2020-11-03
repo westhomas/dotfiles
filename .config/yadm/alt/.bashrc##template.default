@@ -65,12 +65,14 @@ shopt -s histappend
 
 # Common Aliases
 alias less='less --RAW-CONTROL-CHARS'
+alias cat='bat'
 
 {% if yadm.os == "Darwin" %}
 alias ll="ls -alFG"
 {% else %}
 alias ll="ls -alFG --color=auto"
 {% endif %}
+alias grep="grep --color"
 alias untar='tar xvzf $!'
 where() { ll $(which $@); }
 alias isleep='$HOME/isleep'
@@ -191,6 +193,9 @@ $ "
 # TODO: I don't recall why this is needed; remove it later
 # for make
 # export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
+
+# disable auto-updating
+export HOMEBREW_NO_AUTO_UPDATE=1
 
 {% if yadm.os == "Linux" %}
 
