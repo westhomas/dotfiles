@@ -236,6 +236,9 @@ alias vim=nvim
 GPG_TTY=$(tty)
 export GPG_TTY
 
+# Python
+export PATH="$(brew --prefix python@3.8)/bin:$PATH"
+
 #Virtualenv & vitualenvwrapper
 if [[ -r $(brew --prefix)/bin/virtualenvwrapper.sh ]]; then
   export WORKON_HOME=$HOME/.virtualenvs
