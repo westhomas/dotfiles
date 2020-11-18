@@ -278,6 +278,7 @@ alias d-remove-dangling-volumes='docker volume rm $(docker volume ls -qf danglin
 alias d-remove-all-images='docker rmi $(docker images -q)'
 alias d-force-remove-all-containers='read -r -p "WARNING: You are about to force remove all containers across the system? [y/N] " response; if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then docker rm -fv $(docker ps -q); fi'
 alias cleanpy='find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf'
+alias mux=tmuxinator
 
 # Setup bash completion
 [[ -r $(brew --prefix)/etc/bash_completion ]] && . $(brew --prefix)/etc/bash_completion

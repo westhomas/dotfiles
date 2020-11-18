@@ -135,6 +135,31 @@ if [[ "${chosen_mode}" = "Developer" ]]; then
     fi
   fi
 
+  if ! command -v rvm >/dev/null 2>&1; then
+    echo -e "No rvm detected..."
+    echogreen "Would you like to install rvm? (Y/n): "
+    read prompt
+    if [[ "${prompt}" == 'Y' || "${prompt}" == 'y' || "${prompt}" == '' ]]; then
+      echoyellow "Installing rvm"
+      \curl -sSL https://get.rvm.io | bash
+      rvm reload
+      echoyellow "Installing ruby 2.7 and making default"
+      rvm install 2.7
+      rvm alias create default 2.7
+    fi
+  fi
+
+  # Install their brew packages
+  if [[ -r "$HOME/Gemfile" ]]; then
+    echo -e "Gemfile detected..."
+    echogreen "Would you like to install these ruby gems? (Y/n): "
+    read prompt
+    if [[ "${prompt}" == 'Y' || "${prompt}" == 'y' || "${prompt}" == '' ]]; then
+      echoyellow "Updating gems"
+      bundle install
+    fi
+  fi
+
   if [[ "$system_type" = "Linux" ]]; then
 
     # Setup docker
