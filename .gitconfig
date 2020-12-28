@@ -38,4 +38,4 @@
 [pull]
     rebase = true
 [include]
-    path = .gittools
+    path = ~/.gittools

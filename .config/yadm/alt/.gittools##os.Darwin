@@ -1,16 +1,16 @@
 [diff]
-    tool = bc4
+    tool = Beyond-Compare
 [difftool]
     prompt = false
-[difftool "bc4"]
+[difftool "Beyond-Compare"]
     trustExitCode = true
     cmd = `/usr/local/bin/bcomp -title1=HEAD -title2=HEAD~1 "$LOCAL" "$REMOTE"`
 [merge]
-    tool = bc4
+    tool = Beyond-Compare
 	conflictStyle = diff3
 [merge "tool"]
-    bc4 = trustExitCode
-[mergetool "bc4"]
+    Beyond-Compare = trustExitCode
+[mergetool "Beyond-Compare"]
     cmd = `/usr/local/bin/bcomp "$PWD/$LOCAL" "$PWD/$REMOTE" "$PWD/$BASE" "$PWD/$MERGED"`
     #keepBackup = false
     trustExitCode = false
