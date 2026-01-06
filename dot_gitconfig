@@ -1,0 +1,62 @@
+[include]
+    path = .gitconfig.ecl
+
+[core]
+    excludesfile = ${HOME}/.gitignore_global
+    editor = vim
+    pager = diff-so-fancy | less --tabs=4 -RFX
+
+# https://github.com/so-fancy/diff-so-fancy
+[interactive]
+    diffFilter = diff-so-fancy --patch
+[color "diff-highlight"]
+    oldNormal = red bold
+    oldHighlight = red bold 52
+    newNormal = green bold
+    newHighlight = green bold 22
+[color "diff"]
+    meta = 11
+    frag = magenta bold
+    func = 146 bold
+    commit = yellow bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+
+[color]
+    ui = true
+[alias]
+    vlog = log --graph --date=iso --pretty=format:\"%C(yellow)%h %C(cyan)%ad %Cgreen%an%Creset | %s%d\" --color
+    vvlog = log --graph --date=iso --pretty=format:\"%C(yellow)%h %C(cyan)%ad %Cgreen%an (%ae)%Creset | %s%d\" --color
+    vbranches = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
+    vcherry = log --graph --cherry-pick --left-right --date=iso --pretty=format:'%C(yellow)%h %C(cyan)%ad %Cgreen%an%Creset | %s%d' --color
+    apply-stash-to-dirty-working-tree = !git stash show -p | git apply && git stash drop
+    last = difftool -d HEAD~1..HEAD
+    what = diff HEAD~1..HEAD
+    co = checkout
+    st = status
+    undo = reset --soft HEAD~1
+    lines = !git diff --shortstat `git hash-object -t tree /dev/null`
+    #unmerged = "!sh -c \"git branch --no-merged $1\" -"
+    unmerged = "! f() { for i in $(git branch -a --no-merged $@ ); do echo "$(git log -1 --pretty='%Cgreen%ci %Cblue(%cr) %Cgreen%an%Creset ' $i) ${i}" ;  done | sort -r; }; f"
+    unmerged-local = "! f() { for i in $(git branch --no-merged $@ ); do echo "$(git log -1 --pretty='%Cgreen%ci %Cblue(%cr) %Cgreen%an%Creset ' $i) ${i/remotes/origin/}" ;  done | sort -r; }; f"
+    branch-age = "! f() { for i in $(git branch -a $@ | sed 's/^..//; s/ .*//'); do echo "$(git log -1 --pretty='%Cgreen%ci %Cblue(%cr) %Cgreen%an%Creset ' $i) ${i/remotes/origin/}" ;  done | sort -r; }; f"
+    #branch-delete = !git push origin :$1 || true && git branch -D $1 || true
+    branch-get-all = "!for remote in `git branch -r`; do git branch --track $remote; done"
+    checkout-all-branches = "!for i in `git branch -a | grep remote | grep -v HEAD | grep -v master`; do git checkout ${i#remotes/origin/}; done"
+    forcepull = !git diff --quiet --exit-code && git pull --rebase || (git stash && git pull --rebase && git stash pop)
+
+[push]
+    default = simple
+    autoSetupRemote = true
+[log]
+    decorate = true
+    abbrevCommit = true
+[format]
+    pretty = oneline
+[pull]
+    rebase = true
+[include]
+    path = ~/.gittools
+[init]
+    defaultBranch = master

@@ -1,0 +1,28 @@
+min_version = "2025.11.8"
+
+[tools]
+bat = "0.25.0"
+btop = "1.4.4"
+chezmoi = "latest"
+doggo = "1.0.5"
+fd = "10.2.0"
+fzf = "0.62.0"
+github-cli = "2.82.1"
+jj = "0.34.0"
+lsd = "1.1.5"
+neovim = "0.11.5"
+node = "23.11.0"
+ripgrep = "14.1.1"
+starship = "1.23.0"
+"ubi:nushell/nushell" = { version = "0.108.0", exe = "nu" }
+zellij = "0.43.0"
+zoxide = "0.9.8"
+opencode = "1.0.223"
+
+[settings]
+experimental = true
+lockfile = true
+pin = true
+
+[env]
+OPENCODE_EXPERIMENTAL_BASH_DEFAULT_TIMEOUT_MS = '240000'
