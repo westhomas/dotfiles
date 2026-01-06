@@ -2,7 +2,7 @@ min_version = "2025.11.8"
 
 [tools]
 bat = "0.25.0"
-btop = "1.4.4"
+# btop = "1.4.4"
 chezmoi = "latest"
 doggo = "1.0.5"
 fd = "10.2.0"
