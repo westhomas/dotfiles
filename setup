@@ -1,16 +1,19 @@
 #!/bin/bash
 
+set -x
 set -euo pipefail
 
 if command -v chezmoi >/dev/null; then
   chezmoi init --apply --source $PWD
-  exit 0
-fi
-
-if command -v mise >/dev/null; then
+elif command -v mise >/dev/null; then
   mise exec chezmoi -- chezmoi init --apply --source $PWD
-  exit 0
+else
+  sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply --source $PWD
 fi
 
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply --source $PWD
+# Brew bundle if available
+if command -v brew >/dev/null && [[ -f "$HOME/.Brewfile" ]]; then
+  brew bundle --file="$HOME/.Brewfile"
+fi
+
 exit 0

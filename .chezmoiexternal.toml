@@ -1,4 +1,0 @@
-[".local/bin/diff-so-fancy"]
-    type = "file"
-    url = "https://raw.githubusercontent.com/so-fancy/diff-so-fancy/v1.4.4/diff-so-fancy"
-    executable = true

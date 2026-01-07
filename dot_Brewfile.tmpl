@@ -1,0 +1,15 @@
+{{ if eq .chezmoi.os "darwin" -}}
+brew "git"
+brew "diff-so-fancy"
+cask "font-lilex-nerd-font"
+cask "beyond-compare"
+cask "flycut"
+cask "google-chrome"
+cask "slack"
+cask "visual-studio-code"
+cask "iterm2"
+cask "omnidisksweeper"
+cask "1password"
+cask "1password-cli"
+
+{{- end }}

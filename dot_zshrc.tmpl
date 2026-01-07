@@ -21,9 +21,21 @@ if [[ -d $HOME/.krew ]] ; then
   export PATH=$HOME/.krew/bin:$PATH
 fi
 
-# enable brew if found on linux
-if [ -f /home/linuxbrew/.linuxbrew/bin/brew ] ; then
+# Setup brew if available
+if [ -f /home/linuxbrew/.linuxbrew/bin/brew ]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+elif [ -f /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -f /usr/local/bin/brew ]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
+
+if command -v lsd > /dev/null ; then
+  alias ls="lsd"
+  alias ll="ls -algh"
+  alias la='ls -a'
+  alias lla='ls -lgha'
+  alias lt='ls --tree'
 fi
 
 if command -v mise > /dev/null ; then
@@ -101,4 +113,15 @@ fi
 # syntax highlighting needs to be at the end because of reasons
 if [[ -d .zsh/zsh-syntax-highlighting ]] ; then
   source .zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
+if command -v atuin > /dev/null; then
+  if [ -n "$BASH_VERSION" ]; then
+    [ -f "$HOME/.atuin/bin/env" ] && source "$HOME/.atuin/bin/env"
+    [ -f /opt/homebrew/etc/profile.d/bash-preexec.sh ] && source /opt/homebrew/etc/profile.d/bash-preexec.sh
+    [ -f /home/linuxbrew/.linuxbrew/etc/profile.d/bash-preexec.sh ] && source /home/linuxbrew/.linuxbrew/etc/profile.d/bash-preexec.sh
+    eval "$(atuin init bash --disable-up-arrow)"
+  elif [ -n "$ZSH_VERSION" ]; then
+    eval "$(atuin init zsh --disable-up-arrow)"
+  fi
 fi
