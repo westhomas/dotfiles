@@ -17,6 +17,10 @@ if [[ -d $HOME/.local/bin ]] ; then
   export PATH=$HOME/.local/bin:$PATH
 fi 
 
+if command -v mise > /dev/null ; then
+  eval "$(mise activate zsh)"
+fi
+
 if [[ -d $HOME/.krew ]] ; then
   export PATH=$HOME/.krew/bin:$PATH
 fi
@@ -36,10 +40,6 @@ if command -v lsd > /dev/null ; then
   alias la='ls -a'
   alias lla='ls -lgha'
   alias lt='ls --tree'
-fi
-
-if command -v mise > /dev/null ; then
-  eval "$(mise activate zsh)"
 fi
 
 autoload -Uz compinit && compinit
@@ -117,3 +117,8 @@ if command -v atuin > /dev/null; then
     eval "$(atuin init zsh --disable-up-arrow)"
   fi
 fi
+
+# tab completion should glob dot files
+# _comp_options+=(globdots)
+setopt glob_dots
+

@@ -3,6 +3,22 @@
 set -x
 set -euo pipefail
 
+# Install Homebrew if not available
+if ! command -v brew >/dev/null; then
+  echo "Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+  # Add brew to PATH for this session
+  if [[ -f /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [[ -f /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  elif [[ -f /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  fi
+fi
+
+# Install or run chezmoi
 if command -v chezmoi >/dev/null; then
   chezmoi init --apply --source $PWD
 elif command -v mise >/dev/null; then
@@ -13,6 +29,7 @@ fi
 
 # Brew bundle if available
 if command -v brew >/dev/null && [[ -f "$HOME/.Brewfile" ]]; then
+  echo "Installing Homebrew packages..."
   brew bundle --file="$HOME/.Brewfile"
 fi
 
