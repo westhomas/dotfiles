@@ -23,20 +23,6 @@ apply:
 diff:
 	chezmoi diff --source=$(PWD)
 
-# Re-add all modified managed files back to source
-re-add:
-	@echo "Files that would be re-added:"
-	@chezmoi re-add --dry-run
-	@echo ""
-	@read -p "Proceed with re-add? [y/N] " -n 1 -r; \
-	echo; \
-	if [[ $$REPLY =~ ^[Yy]$$ ]]; then \
-		chezmoi re-add; \
-		echo "Files re-added successfully"; \
-	else \
-		echo "Re-add cancelled"; \
-	fi
-
 # Install all tools
 install-tools:
 	@echo "Installing mise tools..."
