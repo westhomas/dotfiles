@@ -2,6 +2,18 @@ local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 local act = wezterm.action
 
+config.unix_domains = {
+	{
+		name = "unix",
+	},
+}
+
+-- This causes `wezterm` to act as though it was started as
+-- `wezterm connect unix` by default, connecting to the unix
+-- domain on startup.
+-- If you prefer to connect manually, leave out this line.
+config.default_gui_startup_args = { "connect", "unix" }
+
 -- Font configuration
 config.font = wezterm.font("Lilex Nerd Font Mono")
 config.font_size = 14.0
