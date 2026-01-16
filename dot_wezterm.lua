@@ -44,12 +44,18 @@ config.keys = {
 	{ key = "d", mods = "CMD", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
 	{ key = "d", mods = "CMD|SHIFT", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
 
+	-- Navigate panes (vim-style)
+	{ key = "h", mods = "CMD|SHIFT", action = act.ActivatePaneDirection("Left") },
+	{ key = "l", mods = "CMD|SHIFT", action = act.ActivatePaneDirection("Right") },
+	{ key = "k", mods = "CMD|SHIFT", action = act.ActivatePaneDirection("Up") },
+	{ key = "j", mods = "CMD|SHIFT", action = act.ActivatePaneDirection("Down") },
+
 	-- Close current pane instead of tab
 	{ key = "w", mods = "CMD", action = act.CloseCurrentPane({ confirm = true }) },
 
 	-- Run make apply in new tab and close when done
 	{
-		key = "a",
+		key = "r",
 		mods = "CMD|ALT",
 		action = act.SpawnCommandInNewTab({
 			args = { "zsh", "-i", "-c", "cd ~/code/dotfiles && make apply; exit" },
