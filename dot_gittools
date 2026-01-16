@@ -1,0 +1,17 @@
+# Beyond Compare
+[diff]
+    tool = Beyond-Compare
+[difftool]
+    prompt = false
+[difftool "Beyond-Compare"]
+    trustExitCode = true
+    cmd = "/opt/homebrew/bin/bcomp -title1=\"${BASE}\" -title2=\"${PWD}\" \"${LOCAL}\" \"${REMOTE}\""
+[merge]
+    tool = Beyond-Compare
+    conflictStyle = diff3
+[merge "tool"]
+    Beyond-Compare = trustExitCode
+[mergetool "Beyond-Compare"]
+    cmd = `/Applications/Beyond\\ Compare.app/Contents/MacOS/bcomp "$PWD/$LOCAL" "$PWD/$REMOTE" "$PWD/$BASE" "$PWD/$MERGED"`
+    #keepBackup = false
+    trustExitCode = false
