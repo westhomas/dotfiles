@@ -33,4 +33,10 @@ if command -v brew >/dev/null && [[ -f "$HOME/.Brewfile" ]]; then
   brew bundle --file="$HOME/.Brewfile"
 fi
 
+# Install oh-my-zsh if not present (after zsh is installed via brew/mise)
+if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+  echo "Installing oh-my-zsh..."
+  sh -c "$(curl -fsSL https://install.ohmyz.sh)" "" --unattended
+fi
+
 exit 0
