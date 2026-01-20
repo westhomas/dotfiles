@@ -20,17 +20,30 @@ return {
     -- opts will be merged with the parent spec
     opts = {
       defaults = {
+        -- Show all files including hidden and ignored, but exclude .git, node_modules, poetry.lock
         file_ignore_patterns = { ".git/", "node_modules", "poetry.lock" },
         vimgrep_arguments = {
           "rg",
           "--color=never",
           "--no-heading",
           "--hidden",
+          "--no-ignore",
           "--with-filename",
           "--line-number",
           "--column",
           "--smart-case",
           "--trim",
+          "--glob=!.git/",
+          "--glob=!node_modules/",
+          "--glob=!poetry.lock",
+        },
+      },
+      pickers = {
+        find_files = {
+          -- Show hidden and ignored files
+          hidden = true,
+          no_ignore = true,
+          follow = true,
         },
       },
       -- extensions = {
