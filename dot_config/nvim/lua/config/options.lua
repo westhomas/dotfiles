@@ -5,3 +5,6 @@
 vim.opt.expandtab = true -- Use spaces instead of tabs
 vim.opt.tabstop = 2 -- Number of spaces per tab
 vim.opt.shiftwidth = 2 -- Number of spaces for indentation
+
+-- Enable true color support for transparency
+vim.opt.termguicolors = true
