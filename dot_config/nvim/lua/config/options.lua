@@ -8,3 +8,7 @@ vim.opt.shiftwidth = 2 -- Number of spaces for indentation
 
 -- Enable true color support for transparency
 vim.opt.termguicolors = true
+
+-- Disable automatic visual mode on mouse click (keep other mouse functionality)
+vim.opt.mouse = "a" -- Enable mouse in all modes
+vim.opt.selectmode = "" -- Don't enter visual mode automatically on mouse selection
