@@ -53,6 +53,9 @@ config.keys = {
 	-- Close current pane instead of tab
 	{ key = "w", mods = "CMD", action = act.CloseCurrentPane({ confirm = true }) },
 
+	-- Shift+Enter sends newline for multiline prompts
+	{ key = "Enter", mods = "SHIFT", action = act.SendString("\n") },
+
 	-- Run make apply in new tab and close when done
 	{
 		key = "r",
