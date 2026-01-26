@@ -38,6 +38,22 @@ config.window_padding = {
 	bottom = 2,
 }
 
+-- Pane border styling to highlight active pane
+config.inactive_pane_hsb = {
+	saturation = 0.6,
+	brightness = 0.3, -- Much dimmer inactive panes
+}
+
+-- Set pane border colors
+config.colors = {
+	-- Active pane border (bright)
+	split = "#FFD700", -- Gold/yellow
+
+	-- You can also set these for more control:
+	-- compose_cursor = "#FFD700",
+	-- cursor_bg = "#FFD700",
+}
+
 -- iTerm2-style keybindings
 config.keys = {
 	-- Split panes (iTerm2 style)
