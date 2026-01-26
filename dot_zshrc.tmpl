@@ -180,6 +180,17 @@ fi
 bindkey -v
 export KEYTIMEOUT=1 # make switching between modes faster
 
+# Prevent vi-mode from intercepting Option+Arrow keys and word delete keys
+# These keys should just do normal word navigation/deletion, not enter visual mode
+bindkey -M vicmd '^[[1;3D' vi-backward-word    # Option+Left in command mode
+bindkey -M vicmd '^[[1;3C' vi-forward-word     # Option+Right in command mode
+bindkey -M viins '^[[1;3D' backward-word       # Option+Left in insert mode
+bindkey -M viins '^[[1;3C' forward-word        # Option+Right in insert mode
+bindkey -M vicmd '^[^?' vi-backward-kill-word  # Option+Backspace in command mode
+bindkey -M vicmd '^[[3;3~' kill-word           # Option+Delete in command mode
+bindkey -M viins '^[^?' backward-kill-word     # Option+Backspace in insert mode
+bindkey -M viins '^[[3;3~' kill-word           # Option+Delete in insert mode
+
 # enable the starship prompt
 if command -v starship > /dev/null ; then
   eval "$(starship init zsh)"
