@@ -136,6 +136,11 @@ fi
 # add user local completion folder to fpath
 fpath+=(~/.zsh/completion)
 
+# zsh-autocomplete plugin (must be loaded early, before compinit)
+if [[ -d ~/.zsh/zsh-autocomplete ]]; then
+  source ~/.zsh/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+fi
+
 if [[ -d $HOME/.local/bin ]] ; then 
   export PATH=$HOME/.local/bin:$PATH
 fi 
@@ -164,6 +169,17 @@ if command -v lsd > /dev/null ; then
   alias lla='ls -lgha'
   alias lt='ls --tree'
 fi
+
+# Completion styling
+zstyle ':completion:*' menu select                       # Enable menu selection with arrow keys
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive matching
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"  # Colorize completions
+zstyle ':completion:*' group-name ''                     # Group completions by category
+zstyle ':completion:*:descriptions' format '%F{green}-- %d --%f'
+zstyle ':completion:*:warnings' format '%F{red}-- no matches --%f'
+zstyle ':completion:*' completer _expand _complete _correct _approximate
+zstyle ':completion:*' use-cache on                      # Cache completions
+zstyle ':completion:*' cache-path ~/.zsh/cache
 
 autoload -Uz compinit && compinit
 
@@ -210,6 +226,28 @@ if command -v flux > /dev/null ; then
   source <(flux completion zsh)
 fi
 
+# Tool-specific completions
+if command -v docker > /dev/null ; then
+  source <(docker completion zsh 2>/dev/null) || true
+fi
+
+if command -v gh > /dev/null ; then
+  source <(gh completion -s zsh)
+fi
+
+if command -v helm > /dev/null ; then
+  source <(helm completion zsh)
+fi
+
+if command -v terraform > /dev/null ; then
+  autoload -U +X bashcompinit && bashcompinit
+  complete -o nospace -C terraform terraform
+fi
+
+if command -v npm > /dev/null ; then
+  source <(npm completion 2>/dev/null) || true
+fi
+
 # if zoxide is installed, enable it
 if command -v zoxide > /dev/null ; then
   eval "$(zoxide init zsh)"
@@ -237,13 +275,13 @@ if command -v dagger > /dev/null ; then
   export DAGGER_NO_NAG=1
 fi
 
-if [[ -d .zsh/zsh-autosuggestions ]] ; then
-  source .zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+if [[ -d ~/.zsh/zsh-autosuggestions ]] ; then
+  source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
 
 # syntax highlighting needs to be at the end because of reasons
-if [[ -d .zsh/zsh-syntax-highlighting ]] ; then
-  source .zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [[ -d ~/.zsh/zsh-syntax-highlighting ]] ; then
+  source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
 if command -v atuin > /dev/null; then
