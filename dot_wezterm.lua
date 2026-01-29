@@ -69,6 +69,9 @@ config.keys = {
 	-- Close current pane instead of tab
 	{ key = "w", mods = "CMD", action = act.CloseCurrentPane({ confirm = true }) },
 
+	-- Swap pane with another (shows picker)
+	{ key = "m", mods = "CMD|SHIFT", action = act.PaneSelect({ mode = "SwapWithActive" }) },
+
 	-- Shift+Enter sends newline for multiline prompts
 	{ key = "Enter", mods = "SHIFT", action = act.SendString("\n") },
 
