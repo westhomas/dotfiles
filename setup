@@ -33,6 +33,19 @@ if command -v brew >/dev/null && [[ -f "$HOME/.Brewfile" ]]; then
   brew bundle --file="$HOME/.Brewfile"
 fi
 
+# Install mise if not available
+if ! command -v mise >/dev/null; then
+  echo "Installing mise..."
+  curl https://mise.run/zsh | sh
+  eval "$(~/.local/bin/mise activate zsh)"
+fi
+
+# Install mise tools
+if command -v mise >/dev/null; then
+  echo "Installing mise tools..."
+  mise install
+fi
+
 # Install oh-my-zsh if not present (after zsh is installed via brew/mise)
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
   echo "Installing oh-my-zsh..."
