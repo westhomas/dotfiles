@@ -25,7 +25,7 @@ config.window_background_opacity = 0.75
 config.macos_window_background_blur = 9
 
 -- Color scheme (optional, adjust to your preference)
-config.color_scheme = "Monokai"
+config.color_scheme = "Monokai Remastered"
 
 -- Remove window title bar (keeps resize handles)
 config.window_decorations = "RESIZE"
