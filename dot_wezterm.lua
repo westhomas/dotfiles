@@ -2,6 +2,11 @@ local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 local act = wezterm.action
 
+-- Session persistence plugin
+os.execute("mkdir -p " .. wezterm.home_dir .. "/.local/share/wezterm/plugins")
+local resurrect = wezterm.plugin.require("https://github.com/MLFlexer/resurrect.wezterm")
+resurrect.state_manager.periodic_save()
+
 config.unix_domains = {
 	{
 		name = "unix",
@@ -82,6 +87,36 @@ config.keys = {
 		action = act.SpawnCommandInNewTab({
 			args = { "zsh", "-i", "-c", "cd ~/code/dotfiles && make apply; exit" },
 		}),
+	},
+
+	-- Session save/restore (resurrect.wezterm)
+	{
+		key = "w",
+		mods = "ALT",
+		action = wezterm.action_callback(function(win, pane)
+			resurrect.state_manager.save_state(resurrect.workspace_state.get_workspace_state())
+			wezterm.log_info("Session saved")
+		end),
+	},
+	{
+		key = "r",
+		mods = "ALT",
+		action = wezterm.action_callback(function(win, pane)
+			resurrect.fuzzy_loader.fuzzy_load(win, pane, function(id, label)
+				local type = string.match(id, "^([^/]+)")
+				id = string.match(id, "([^/]+)$")
+				id = string.match(id, "(.+)%..+$")
+				local opts = {
+					relative = true,
+					restore_text = true,
+					on_pane_restore = resurrect.tab_state.default_on_pane_restore,
+				}
+				if type == "workspace" then
+					local state = resurrect.state_manager.load_state(id, "workspace")
+					resurrect.workspace_state.restore_workspace(state, opts)
+				end
+			end)
+		end),
 	},
 }
 
