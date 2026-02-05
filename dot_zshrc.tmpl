@@ -271,6 +271,14 @@ dc() {
     docker compose "$@"
 }
 
+# find filename using fzf and copy the full path to clipboard
+fcp() {
+  local file
+  file=$(fzf --query="$1" --preview 'bat --color=always {} 2>/dev/null || cat {}') || return
+  realpath "$file" | pbcopy
+  echo "Copied: $(pbpaste)"
+}
+
 if command -v dagger > /dev/null ; then
   export DAGGER_NO_NAG=1
 fi
