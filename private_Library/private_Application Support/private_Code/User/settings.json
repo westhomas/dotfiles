@@ -1,0 +1,142 @@
+{
+    "editor.matchBrackets": "never",
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": false,
+    "python.linting.pylanceEnabled": false,
+    "python.linting.enabled": true,
+    "vscode_custom_css.imports": [
+        "file:///Users/wes/.vscode/extensions/webrender.synthwave-x-fluoromachine-0.0.12/synthwave-x-fluoromachine.css"
+        ],
+    "extensions.ignoreRecommendations": true,
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter.notebook.ipynb"
+    },
+    "files.autoSave": "afterDelay",
+    "search.exclude": {
+        ".bash_eternal_history": true,
+        "**/.vscode-server": true
+    },
+    "editor.fontWeight": "normal",
+    "terminal.integrated.fontFamily": "Jetbrains Mono",
+    "terminal.external.osxExec": "iTerm.app",
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [
+        "--line-length",
+        "120"
+    ],
+    "workbench.startupEditor": "none",
+    "python.analysis.extraPaths": [],
+    "search.searchEditor.reusePriorSearchConfiguration": true,
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "security.workspace.trust.untrustedFiles": "open",
+    "editor.fontLigatures": false,
+    "[python]": {
+        "editor.formatOnType": true
+    },
+    "editor.stickyScroll.enabled": true,
+    "editor.inlineSuggest.enabled": true,
+    "[shellscript]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "vsicons.dontShowNewVersionMessage": true,
+    "launch": {
+        "configurations": [
+            {
+                "name": "Python: Remote Attach",
+                "type": "python",
+                "request": "attach",
+                "connect": {
+                    "host": "localhost",
+                    "port": 5678
+                },
+                "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "/app"
+                }
+                ]
+            }
+        ]
+    },
+    "vscode-yaml-sort.forceQuotes": true,
+    "vscode-yaml-sort.quotingType": "\"",
+    "workbench.iconTheme": "vscode-icons",
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": true,
+        "markdown": false,
+        "scminput": false
+    },
+    "python.defaultInterpreterPath": "/Users/wes/miniconda3/envs/comms",
+    "terminal.integrated.inheritEnv": false,
+    "git.suggestSmartCommit": false,
+    "git.openRepositoryInParentFolders": "never",
+    "explorer.confirmDragAndDrop": false,
+    "auto-build.defaultEnv.name": "STM32F103RE_creality",
+    "platformio-ide.autoOpenPlatformIOIniFile": false,
+    "cSpell.userWords": [
+        "Codefresh",
+        "Decisio",
+        "Decisio’s"
+    ],
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "[yaml]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "svelte.enable-ts-plugin": true,
+    "[svelte]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "compareHelper.defaultExternalTools": {
+        "folders": "bcompare",
+        "images": "bcompare",
+        "text": "bcompare"
+      },
+      "compareHelper.externalTools": [
+        {
+          "name": "bcompare",
+          "path": "/opt/homebrew/bin/bcomp",
+          "compares": ["text", "folders", "images"]
+        }
+    ],
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.fontFamily": "Menlo, Monaco, 'Courier New', monospace, Lilex",
+    "mssql.enableRichExperiences": true,
+    "mssql.connections": [
+        {
+            "server": "localhost",
+            "database": "aam",
+            "user": "sa",
+            "password": "",
+            "authenticationType": "SqlLogin",
+            "encrypt": "true",
+            "trustServerCertificate": true,
+            "connectTimeout": 120,
+            "commandTimeout": 30,
+            "connectRetryCount": 1,
+            "connectRetryInterval": 10,
+            "applicationName": "vscode-mssql",
+            "multipleActiveResultSets": true,
+            "profileName": "aam",
+            "savePassword": true,
+            "groupId": "F9C6CF63-3662-45F3-B799-E732CDE808CB",
+            "id": "850FA807-A317-4F21-8806-FC066881C8E0",
+            "containerName": "aamdevelopment-sqlserver-1"
+        }
+    ],
+    "mssql.connectionGroups": [
+        {
+            "name": "ROOT",
+            "id": "F9C6CF63-3662-45F3-B799-E732CDE808CB"
+        }
+    ],
+    "explorer.confirmDelete": false,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "claudeCode.preferredLocation": "sidebar"
+}
