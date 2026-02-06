@@ -5,7 +5,7 @@
     "python.linting.pylanceEnabled": false,
     "python.linting.enabled": true,
     "vscode_custom_css.imports": [
-        "file:///Users/wes/.vscode/extensions/webrender.synthwave-x-fluoromachine-0.0.12/synthwave-x-fluoromachine.css"
+        "file://{{ .chezmoi.homeDir }}/.vscode/extensions/webrender.synthwave-x-fluoromachine-0.0.12/synthwave-x-fluoromachine.css"
         ],
     "extensions.ignoreRecommendations": true,
     "workbench.editorAssociations": {
@@ -69,18 +69,13 @@
         "markdown": false,
         "scminput": false
     },
-    "python.defaultInterpreterPath": "/Users/wes/miniconda3/envs/comms",
+    "python.defaultInterpreterPath": "{{ .chezmoi.homeDir }}/miniconda3/envs/comms",
     "terminal.integrated.inheritEnv": false,
     "git.suggestSmartCommit": false,
     "git.openRepositoryInParentFolders": "never",
     "explorer.confirmDragAndDrop": false,
     "auto-build.defaultEnv.name": "STM32F103RE_creality",
     "platformio-ide.autoOpenPlatformIOIniFile": false,
-    "cSpell.userWords": [
-        "Codefresh",
-        "Decisio",
-        "Decisio’s"
-    ],
     "[html]": {
         "editor.defaultFormatter": "vscode.html-language-features"
     },

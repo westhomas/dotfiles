@@ -1,4 +1,4 @@
-.PHONY: help setup apply diff re-add install-tools update-tools update
+.PHONY: help setup apply diff re-add install-tools update-tools update install-vscode-extensions
 
 # Default target
 help:
@@ -10,6 +10,7 @@ help:
 	@echo "  make install-tools - Install mise and Homebrew tools"
 	@echo "  make update-tools  - Update all tools (mise and brew)"
 	@echo "  make update        - Git pull and apply changes"
+	@echo "  make install-vscode-extensions - Install VS Code extensions"
 
 # Run the setup script
 setup:
@@ -36,6 +37,12 @@ update-tools:
 	@command -v mise >/dev/null && mise upgrade || echo "mise not found"
 	@echo "Updating Homebrew packages..."
 	@command -v brew >/dev/null && brew upgrade || echo "Homebrew not found"
+
+# Install VS Code extensions
+install-vscode-extensions:
+	@command -v code >/dev/null || { echo "VS Code CLI (code) not found"; exit 1; }
+	@echo "Installing VS Code extensions..."
+	@cat "$$HOME/.config/Code/extensions.txt" | xargs -L1 code --install-extension
 
 # Pull latest changes and apply
 update:
