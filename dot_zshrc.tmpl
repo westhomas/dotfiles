@@ -78,7 +78,26 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(
+  git
+  docker
+  docker-compose
+  npm
+  kubectl
+  terraform
+  aws
+  gcloud
+  helm
+  pip
+  python
+  golang
+  rust
+  vscode
+  macos
+  aliases
+  command-not-found
+  colored-man-pages
+)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -147,6 +166,7 @@ fi
 
 if command -v mise > /dev/null ; then
   eval "$(mise activate zsh)"
+  eval "$(mise completion zsh)"
 fi
 
 if [[ -d $HOME/.krew ]] ; then
@@ -252,6 +272,16 @@ fi
 if command -v zoxide > /dev/null ; then
   eval "$(zoxide init zsh)"
   # alias cd="z"
+fi
+
+# chezmoi completions
+if command -v chezmoi > /dev/null ; then
+  eval "$(chezmoi completion zsh)"
+fi
+
+# supabase completions
+if command -v supabase > /dev/null ; then
+  eval "$(supabase completion zsh)"
 fi
 
 # some nice functions and aliases
