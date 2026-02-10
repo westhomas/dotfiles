@@ -165,8 +165,8 @@ if [[ -d $HOME/.local/bin ]] ; then
 fi 
 
 if command -v mise > /dev/null ; then
-  eval "$(mise activate zsh)"
-  eval "$(mise completion zsh)"
+  eval "$(mise activate zsh 2>/dev/null)"
+  eval "$(mise completion zsh 2>/dev/null)" || true
 fi
 
 if [[ -d $HOME/.krew ]] ; then
@@ -229,21 +229,21 @@ bindkey -M viins '^[[3;3~' kill-word           # Option+Delete in insert mode
 
 # enable the starship prompt
 if command -v starship > /dev/null ; then
-  eval "$(starship init zsh)"
+  eval "$(starship init zsh 2>/dev/null)" || true
 fi
 
 # enable fzf autocompletion and key-bindings if found
 if command -v fzf > /dev/null ; then
-  source <(fzf --zsh)
+  source <(fzf --zsh 2>/dev/null) || true
 fi
 
 if command -v kubectl > /dev/null ; then
-  source <(kubectl completion zsh)
+  source <(kubectl completion zsh 2>/dev/null) || true
   alias k="kubectl"
 fi
 
 if command -v flux > /dev/null ; then
-  source <(flux completion zsh)
+  source <(flux completion zsh 2>/dev/null) || true
 fi
 
 # Tool-specific completions
@@ -252,11 +252,11 @@ if command -v docker > /dev/null ; then
 fi
 
 if command -v gh > /dev/null ; then
-  source <(gh completion -s zsh)
+  source <(gh completion -s zsh 2>/dev/null) || true
 fi
 
 if command -v helm > /dev/null ; then
-  source <(helm completion zsh)
+  source <(helm completion zsh 2>/dev/null) || true
 fi
 
 if command -v terraform > /dev/null ; then
@@ -270,18 +270,18 @@ fi
 
 # if zoxide is installed, enable it
 if command -v zoxide > /dev/null ; then
-  eval "$(zoxide init zsh)"
+  eval "$(zoxide init zsh 2>/dev/null)" || true
   # alias cd="z"
 fi
 
 # chezmoi completions
 if command -v chezmoi > /dev/null ; then
-  eval "$(chezmoi completion zsh)"
+  eval "$(chezmoi completion zsh 2>/dev/null)" || true
 fi
 
 # supabase completions
 if command -v supabase > /dev/null ; then
-  eval "$(supabase completion zsh)"
+  eval "$(supabase completion zsh 2>/dev/null)" || true
 fi
 
 # some nice functions and aliases
@@ -327,9 +327,9 @@ if command -v atuin > /dev/null; then
     [ -f "$HOME/.atuin/bin/env" ] && source "$HOME/.atuin/bin/env"
     [ -f /opt/homebrew/etc/profile.d/bash-preexec.sh ] && source /opt/homebrew/etc/profile.d/bash-preexec.sh
     [ -f /home/linuxbrew/.linuxbrew/etc/profile.d/bash-preexec.sh ] && source /home/linuxbrew/.linuxbrew/etc/profile.d/bash-preexec.sh
-    eval "$(atuin init bash --disable-up-arrow)"
+    eval "$(atuin init bash --disable-up-arrow 2>/dev/null)" || true
   elif [ -n "$ZSH_VERSION" ]; then
-    eval "$(atuin init zsh --disable-up-arrow)"
+    eval "$(atuin init zsh --disable-up-arrow 2>/dev/null)" || true
   fi
 fi
 
