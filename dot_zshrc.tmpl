@@ -152,6 +152,15 @@ if [[ -S ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ]]; t
 fi
 {{- end }}
 
+# Setup brew first (before other PATH modifications)
+if [ -f /home/linuxbrew/.linuxbrew/bin/brew ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+elif [ -f /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -f /usr/local/bin/brew ]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
+
 # add user local completion folder to fpath
 fpath+=(~/.zsh/completion)
 
@@ -160,9 +169,9 @@ if [[ -d ~/.zsh/zsh-autocomplete ]]; then
   source ~/.zsh/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 fi
 
-if [[ -d $HOME/.local/bin ]] ; then 
+if [[ -d $HOME/.local/bin ]] ; then
   export PATH=$HOME/.local/bin:$PATH
-fi 
+fi
 
 if command -v mise > /dev/null ; then
   eval "$(mise activate zsh 2>/dev/null)"
@@ -171,15 +180,6 @@ fi
 
 if [[ -d $HOME/.krew ]] ; then
   export PATH=$HOME/.krew/bin:$PATH
-fi
-
-# Setup brew if available
-if [ -f /home/linuxbrew/.linuxbrew/bin/brew ]; then
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-elif [ -f /opt/homebrew/bin/brew ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-elif [ -f /usr/local/bin/brew ]; then
-  eval "$(/usr/local/bin/brew shellenv)"
 fi
 
 if command -v lsd > /dev/null ; then
