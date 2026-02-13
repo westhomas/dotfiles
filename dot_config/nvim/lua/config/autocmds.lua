@@ -12,3 +12,11 @@ vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
   command = "silent! wall",
   nested = true,
 })
+
+-- Disable diagnostics for .env files (environment variables aren't "unused")
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = { "*.env", ".env*", "*.env.*" },
+  callback = function()
+    vim.diagnostic.disable(0)
+  end,
+})
