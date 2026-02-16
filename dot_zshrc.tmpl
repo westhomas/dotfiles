@@ -333,9 +333,9 @@ if command -v atuin > /dev/null; then
   fi
 fi
 
-# tab completion should glob dot files
-# _comp_options+=(globdots)
-setopt glob_dots
+# tab completion should show dot files (but not . and ..)
+_comp_options+=(globdots)
+zstyle ':completion:*' special-dirs false
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # bun completions
