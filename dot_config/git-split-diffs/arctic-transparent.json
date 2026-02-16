@@ -1,0 +1,75 @@
+{
+    "SYNTAX_HIGHLIGHTING_THEME": "nord",
+    "DEFAULT_COLOR": {
+        "color": "#E5E9F0",
+        "backgroundColor": "#00000000"
+    },
+    "COMMIT_HEADER_COLOR": {
+        "color": "#4C566A",
+        "backgroundColor": "#00000000"
+    },
+    "COMMIT_HEADER_LABEL_COLOR": {
+        "color": "#88C0D0"
+    },
+    "COMMIT_SHA_COLOR": {
+        "color": "#BF616A"
+    },
+    "COMMIT_AUTHOR_COLOR": {
+        "color": "#D08770"
+    },
+    "COMMIT_DATE_COLOR": {
+        "color": "#EBCB8B"
+    },
+    "COMMIT_MESSAGE_COLOR": {
+        "color": "#D8DEE9",
+        "backgroundColor": "#00000000"
+    },
+    "COMMIT_TITLE_COLOR": {
+        "color": "#ECEFF4"
+    },
+    "FILE_NAME_COLOR": {
+        "color": "#EBCB8B",
+        "backgroundColor": "#00000000"
+    },
+    "BORDER_COLOR": {
+        "color": "#EBCB8B",
+        "backgroundColor": "#00000000"
+    },
+    "HUNK_HEADER_COLOR": {
+        "color": "#4C566A",
+        "backgroundColor": "#00000000"
+    },
+    "DELETED_WORD_COLOR": {
+        "color": "#EBCB8B",
+        "backgroundColor": "#BF616A33"
+    },
+    "INSERTED_WORD_COLOR": {
+        "color": "#EBCB8B",
+        "backgroundColor": "#A3BE8C33"
+    },
+    "DELETED_LINE_NO_COLOR": {
+        "color": "#BF616A",
+        "backgroundColor": "#00000000"
+    },
+    "INSERTED_LINE_NO_COLOR": {
+        "color": "#A3BE8C",
+        "backgroundColor": "#00000000"
+    },
+    "UNMODIFIED_LINE_NO_COLOR": {
+        "color": "#4C566A"
+    },
+    "DELETED_LINE_COLOR": {
+        "color": "#BF616A",
+        "backgroundColor": "#3a3035"
+    },
+    "INSERTED_LINE_COLOR": {
+        "color": "#A3BE8C",
+        "backgroundColor": "#303a35"
+    },
+    "UNMODIFIED_LINE_COLOR": {
+        "backgroundColor": "#00000000"
+    },
+    "MISSING_LINE_COLOR": {
+        "backgroundColor": "#2E3440"
+    }
+}
