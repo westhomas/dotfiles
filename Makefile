@@ -20,6 +20,10 @@ setup:
 apply:
 	chezmoi apply --source=$(PWD)
 
+# Re-add all modified managed files back to source
+re-add:
+	chezmoi re-add --source=$(PWD)
+
 # Show what would change
 diff:
 	chezmoi diff --source=$(PWD)
