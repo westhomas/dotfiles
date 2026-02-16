@@ -21,7 +21,7 @@ config.default_gui_startup_args = { "connect", "unix" }
 
 -- Font configuration
 config.font = wezterm.font("Lilex Nerd Font Mono")
-config.font_size = 14.0
+config.font_size = 18.0
 
 -- Transparent background
 config.window_background_opacity = 0.75
