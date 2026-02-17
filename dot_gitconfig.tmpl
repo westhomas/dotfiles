@@ -46,6 +46,8 @@
     checkout-all-branches = "!for i in `git branch -a | grep remote | grep -v HEAD | grep -v master`; do git checkout ${i#remotes/origin/}; done"
     forcepull = !git diff --quiet --exit-code && git pull --rebase || (git stash && git pull --rebase && git stash pop)
     diff-inline = -c core.pager=\"diff-so-fancy | less --tabs=4 -RFX\" diff
+    view-commit = "!f() { open \"$(git remote get-url origin | sed 's/\\.git$//' | sed 's|git@\\(.*\\):\\(.*\\)|https://\\1/\\2|')/commit/${1:-HEAD}\"; }; f"
+    vc = !git view-commit
     logs = -c core.pager=\"diff-so-fancy | less --tabs=4 -RFX\" log -p
 
 [push]
