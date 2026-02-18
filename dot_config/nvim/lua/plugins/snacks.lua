@@ -10,7 +10,8 @@ return {
     picker = {
       sources = {
         explorer = {
-          hidden = true,
+          hidden = true, -- show hidden files by default
+          ignored = true, -- show git-ignored files by default
         },
       },
     },
