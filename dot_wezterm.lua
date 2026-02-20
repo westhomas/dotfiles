@@ -126,6 +126,9 @@ config.keys = {
 	-- Close current pane
 	{ key = "w", mods = "CMD", action = act.CloseCurrentPane({ confirm = true }) },
 
+	-- Toggle zoom (hides other panes, press again to restore)
+	{ key = "z", mods = "CMD|SHIFT", action = act.TogglePaneZoomState },
+
 	-- Swap pane with another
 	{ key = "m", mods = "CMD|SHIFT", action = act.PaneSelect({ mode = "SwapWithActive" }) },
 
