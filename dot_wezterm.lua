@@ -59,6 +59,37 @@ config.colors = {
 	-- cursor_bg = "#FFD700",
 }
 
+-- Disable automatic hyperlink detection on hover
+-- Links will only be detected and opened with Cmd+Click (iTerm2 style)
+config.hyperlink_rules = wezterm.default_hyperlink_rules()
+
+-- Mouse bindings - Cmd+Click to open links (iTerm2 style)
+config.mouse_bindings = {
+	-- Cmd+Click to open URLs
+	{
+		event = { Up = { streak = 1, button = "Left" } },
+		mods = "CMD",
+		action = act.OpenLinkAtMouseCursor,
+	},
+	-- Disable default left-click URL opening (without modifier)
+	{
+		event = { Up = { streak = 1, button = "Left" } },
+		mods = "NONE",
+		action = act.Nop,
+	},
+	-- Keep text selection with regular click-and-drag
+	{
+		event = { Down = { streak = 1, button = "Left" } },
+		mods = "NONE",
+		action = act.SelectTextAtMouseCursor("Cell"),
+	},
+	{
+		event = { Drag = { streak = 1, button = "Left" } },
+		mods = "NONE",
+		action = act.ExtendSelectionToMouseCursor("Cell"),
+	},
+}
+
 -- iTerm2-style keybindings
 config.keys = {
 	-- Split panes (iTerm2 style)
