@@ -54,6 +54,11 @@ config.colors = { split = "#FFD700" }
 
 -- Cmd+Click to open links (iTerm2 style)
 config.hyperlink_rules = wezterm.default_hyperlink_rules()
+-- Default rules use \w+ for scheme which misses dashes (e.g. docker-desktop://)
+table.insert(config.hyperlink_rules, {
+	regex = [[\b[\w][\w-]+://\S+]],
+	format = "$0",
+})
 config.mouse_bindings = {
 	{ event = { Up = { streak = 1, button = "Left" } }, mods = "CMD", action = act.OpenLinkAtMouseCursor },
 	{ event = { Up = { streak = 1, button = "Left" } }, mods = "NONE", action = act.Nop },
