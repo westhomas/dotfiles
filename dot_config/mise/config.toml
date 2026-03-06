@@ -4,6 +4,8 @@ min_version = "2025.11.8"
 atuin = "latest"
 bat = "0.25.0"
 # btop = "1.4.4"
+
+
 chezmoi = "latest"
 doggo = "1.0.5"
 fd = "10.2.0"
@@ -24,10 +26,6 @@ zoxide = "0.9.8"
 opencode = "1.0.223"
 uv = "0.9.22"
 rust = "1.93.0"
-
-{{ if eq .chezmoi.os "darwin" -}}
-{{- end }}
-
 [settings]
 experimental = true
 lockfile = true
