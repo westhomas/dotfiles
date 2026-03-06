@@ -45,6 +45,7 @@
     branch-get-all = "!for remote in `git branch -r`; do git branch --track $remote; done"
     checkout-all-branches = "!for i in `git branch -a | grep remote | grep -v HEAD | grep -v master`; do git checkout ${i#remotes/origin/}; done"
     forcepull = !git diff --quiet --exit-code && git pull --rebase || (git stash && git pull --rebase && git stash pop)
+    diff-plain = -c core.pager=\"less -RFX\" diff
     diff-inline = -c core.pager=\"diff-so-fancy | less --tabs=4 -RFX\" diff
     view-commit = "!f() { open \"$(git remote get-url origin | sed 's/\\.git$//' | sed 's|git@\\(.*\\):\\(.*\\)|https://\\1/\\2|')/commit/${1:-HEAD}\"; }; f"
     vc = !git view-commit
@@ -62,6 +63,8 @@
     rebase = true
 [include]
     path = ~/.gittools
+[diff-so-fancy]
+    stripLeadingSymbols = false
 [split-diffs]
     theme-name = arctic-transparent
     theme-directory = {{ .chezmoi.homeDir }}/.config/git-split-diffs
