@@ -2,6 +2,7 @@ min_version = "2025.11.8"
 
 [tools]
 atuin = "latest"
+azure-cli = "2.83.0"
 bat = "0.25.0"
 # btop = "1.4.4"
 
@@ -15,6 +16,7 @@ jj = "0.34.0"
 lazygit = "latest"
 lsd = "1.1.5"
 neovim = "0.11.5"
+deno = "latest"
 node = "23.11.0"
 "npm:git-split-diffs" = "2.3.0"
 pnpm = "latest"
