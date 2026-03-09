@@ -23,9 +23,10 @@ starship = "1.23.0"
 "ubi:nushell/nushell" = { version = "0.108.0", exe = "nu" }
 zellij = "0.43.0"
 zoxide = "0.9.8"
-opencode = "1.0.223"
+opencode = "latest"
 uv = "0.9.22"
 rust = "1.93.0"
+
 [settings]
 experimental = true
 lockfile = true
