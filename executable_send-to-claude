@@ -1,0 +1,99 @@
+#!/bin/bash
+# send-to-claude [--debug] [--enter] [source-panel] [target-panel]
+#
+# Captures the output of the last command from a terminal panel
+# and sends it to another panel.
+# Defaults: source=focused panel, target=non-focused terminal panel.
+#
+# Usage:
+#   ./send-to-claude                          # auto-detect both panels
+#   ./send-to-claude --debug                  # preview output without sending
+#   ./send-to-claude --enter                  # send output then press Enter
+#   ./send-to-claude surface:29               # specify source
+#   ./send-to-claude surface:29 surface:20    # specify both
+
+set -e
+
+if ! command -v cmux &>/dev/null; then
+  echo "Error: cmux is not installed or not in PATH." >&2
+  echo "cmux is a terminal multiplexer controller that lets scripts interact with terminal panels." >&2
+  echo "Install it at: https://cmux.com" >&2
+  exit 1
+fi
+
+DEBUG=false
+ENTER=false
+ARGS=()
+for arg in "$@"; do
+  if [[ "$arg" == "--debug" ]]; then
+    DEBUG=true
+  elif [[ "$arg" == "--enter" ]]; then
+    ENTER=true
+  else
+    ARGS+=("$arg")
+  fi
+done
+
+PANELS=$(cmux list-panels)
+
+FOCUSED=$(echo "$PANELS" | grep '^\*' | awk '{print $2}')
+NON_FOCUSED=$(echo "$PANELS" | grep -v '^\*' | grep 'terminal' | awk '{print $1}' | head -1)
+
+SOURCE="${ARGS[0]:-$FOCUSED}"
+TARGET="${ARGS[1]:-$NON_FOCUSED}"
+
+if [[ -z "$SOURCE" ]]; then
+  echo "Error: Could not detect source panel. Pass it explicitly." >&2
+  exit 1
+fi
+
+if [[ -z "$TARGET" ]]; then
+  echo "Error: Could not detect target panel. Pass it explicitly." >&2
+  exit 1
+fi
+
+SCREEN=$(cmux read-screen --surface "$SOURCE" --lines 200)
+
+OUTPUT=$(echo "$SCREEN" | python3 -c "
+import sys
+lines = sys.stdin.read().splitlines()
+
+# Find lines that look like a shell prompt (start with ❯)
+prompt_indices = [i for i, l in enumerate(lines) if l.strip().startswith('❯')]
+
+if len(prompt_indices) < 2:
+    if prompt_indices:
+        output = lines[prompt_indices[-1] + 1:]
+    else:
+        output = lines
+else:
+    # Include one line above the second-to-last prompt (the command itself)
+    start = max(0, prompt_indices[-2] - 1)
+    end = prompt_indices[-1] - 1
+    output = lines[start:end]
+
+# Strip trailing blank lines
+while output and not output[-1].strip():
+    output.pop()
+
+print('\n'.join(output))
+")
+
+if [[ -z "$OUTPUT" ]]; then
+  echo "No output found to send." >&2
+  exit 1
+fi
+
+LINE_COUNT=$(echo "$OUTPUT" | wc -l | tr -d ' ')
+echo "Capturing $LINE_COUNT lines from: $SOURCE → Sending to: $TARGET" >&2
+
+if $DEBUG; then
+  echo "--- DEBUG OUTPUT ---" >&2
+  echo "$OUTPUT"
+  echo "--- END DEBUG OUTPUT ---" >&2
+else
+  cmux send-panel --panel "$TARGET" "$OUTPUT"
+  if $ENTER; then
+    cmux send-key-panel --panel "$TARGET" enter
+  fi
+fi
