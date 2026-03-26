@@ -58,3 +58,7 @@ macos-option-as-alt = true
 
 # For Claude etc.
 keybind = shift+enter=text:\n
+
+# Cmd+Left/Right for beginning/end of line
+keybind = cmd+left=text:\x01
+keybind = cmd+right=text:\x05

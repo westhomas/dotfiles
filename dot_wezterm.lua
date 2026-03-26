@@ -140,6 +140,10 @@ config.keys = {
 	-- Shift+Enter sends newline for multiline prompts
 	{ key = "Enter", mods = "SHIFT", action = act.SendString("\n") },
 
+	-- Cmd+Left/Right for beginning/end of line
+	{ key = "LeftArrow", mods = "CMD", action = act.SendString("\x01") },
+	{ key = "RightArrow", mods = "CMD", action = act.SendString("\x05") },
+
 	-- Run make apply in new tab and close when done
 	{
 		key = "r",

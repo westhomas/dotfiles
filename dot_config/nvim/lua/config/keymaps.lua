@@ -10,6 +10,11 @@ vim.keymap.set("v", "<S-Tab>", "<gv", { desc = "Unindent and reselect" })
 vim.keymap.set("n", "<Tab>", ">>", { desc = "Indent line" })
 vim.keymap.set("n", "<S-Tab>", "<<", { desc = "Unindent line" })
 
+-- <C-i> for jump forward: Tab is remapped above, so <C-i> (same byte in legacy terminals)
+-- no longer triggers jump-forward. With Kitty keyboard protocol they're distinct keys,
+-- so explicitly bind <C-i> here. noremap=true bypasses the <Tab> mapping above.
+vim.keymap.set("n", "<C-i>", "<C-i>", { noremap = true, desc = "Jump forward in jumplist" })
+
 -- Shift+Tab to unindent in insert mode
 vim.keymap.set("i", "<S-Tab>", "<C-d>", { desc = "Unindent" })
 
