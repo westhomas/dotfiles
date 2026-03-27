@@ -53,6 +53,7 @@
 # theme = iTerm2 Dark Background
 theme = Liquid Carbon Transparent
 background-opacity = 0.6
+scrollback-limit = 10737418240
 macos-option-as-alt = true
 
 
