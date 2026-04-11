@@ -20,6 +20,7 @@ deno = "latest"
 node = "23.11.0"
 "npm:git-split-diffs" = "2.3.0"
 pnpm = "latest"
+python = "3.10.11"
 ripgrep = "14.1.1"
 starship = "1.23.0"
 "ubi:nushell/nushell" = { version = "0.108.0", exe = "nu" }
