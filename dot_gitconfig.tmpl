@@ -31,7 +31,7 @@
     vbranches = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
     vcherry = log --graph --cherry-pick --left-right --date=iso --pretty=format:'%C(yellow)%h %C(cyan)%ad %Cgreen%an%Creset | %s%d' --color
     apply-stash-to-dirty-working-tree = !git stash show -p | git apply && git stash drop
-    last = difftool -d HEAD~1..HEAD
+    last = diff HEAD~1..HEAD
     what = diff HEAD~1..HEAD
     co = checkout
     st = status
@@ -50,6 +50,7 @@
     view-commit = "!f() { open \"$(git remote get-url origin | sed 's/\\.git$//' | sed 's|git@\\(.*\\):\\(.*\\)|https://\\1/\\2|')/commit/${1:-HEAD}\"; }; f"
     vc = !git view-commit
     logs = -c core.pager=\"diff-so-fancy | less --tabs=4 -RFX\" log -p
+    last-bcomp = difftool -d HEAD~1..HEAD
 
 [push]
     default = simple
