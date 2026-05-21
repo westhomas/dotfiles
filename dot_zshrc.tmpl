@@ -307,8 +307,9 @@ dc() {
 
 # find filename using fzf and copy the full path to clipboard
 fcp() {
+  local dir="${1:-.}"
   local file
-  file=$(fzf --query="$1" --preview 'bat --color=always {} 2>/dev/null || cat {}') || return
+  file=$(find "$dir" -type f 2>/dev/null | fzf --preview 'bat --color=always {} 2>/dev/null || cat {}') || return
   realpath "$file" | pbcopy
   echo "Copied: $(pbpaste)"
 }
