@@ -1,0 +1,10 @@
+# Login bash reads this (or .bash_login/.profile) and does NOT read .bashrc, so anything a login
+# shell needs has to be here. .bashrc activates mise with `eval "$(mise activate bash)"`, which
+# means a login shell that never sources .bashrc gets no toolchain at all — the bash counterpart of
+# the .zshenv problem (see dot_zshenv). mise shims need no activation, so put them on PATH here.
+export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
+
+# Keep the usual login-shell convention: interactive login shells still get the full .bashrc.
+case $- in
+  *i*) [ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc" ;;
+esac
