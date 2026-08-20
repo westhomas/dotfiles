@@ -1,0 +1,7 @@
+# Read by EVERY zsh (interactive or not, login or not).
+#
+# .zshrc activates mise with `eval "$(mise activate zsh)"`, which only runs for interactive shells,
+# so non-interactive shells (agent tool calls, `zsh -c`, hooks, cron) would get .zshrc's aliases
+# without the toolchain behind them — e.g. `alias cat="bat"` failing with `command not found: bat`.
+# mise shims need no activation, so putting them on PATH here gives every shell the same tools.
+export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
