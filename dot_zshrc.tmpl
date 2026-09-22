@@ -362,6 +362,9 @@ export ANDROID_HOME=$HOME/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
+# Everything Claude Code
+export ECC_CONTEXT_MONITOR_COST_WARNINGS=off
+
 # claude-mem
 alias claude-mem='$HOME/.bun/bin/bun "$HOME/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
 alias send-to-claude='$HOME/send-to-claude'
