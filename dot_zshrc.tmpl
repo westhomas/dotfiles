@@ -182,7 +182,11 @@ if [[ -d $HOME/.krew ]] ; then
   export PATH=$HOME/.krew/bin:$PATH
 fi
 
-if command -v lsd > /dev/null ; then
+# Run it rather than just resolving it: mise installs a SHIM for every tool in its config, so
+# `command -v lsd` succeeds before the tool itself is installed. The alias then exists while the
+# binary does not, and every `ls` in that window dies with "command not found: lsd" -- which in a
+# freshly-bootstrapped sandbox is exactly when an agent is running commands.
+if lsd --version > /dev/null 2>&1 ; then
   alias ls="lsd"
   alias ll="ls -algh"
   alias la='ls -a'

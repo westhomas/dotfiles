@@ -18,10 +18,15 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TIER="${SBX_TIER:-minimal}"
 
 # The 13 tools worth having immediately. `full` installs everything in the mise config, minus two
-# that cannot build in this image: npm:git-split-diffs (the npm backend aborts asking for input)
-# and azure-cli (pipx/uv build failure; the host `az` covers it).
+# that mise cannot install in this image: npm:git-split-diffs (mise's npm backend aborts asking for
+# input) and azure-cli (pipx/uv build failure; the host `az` covers it).
 MINIMAL_TOOLS=(ripgrep fd fzf bat lsd zoxide starship github-cli node jj lazygit uv chezmoi)
 FULL_EXCLUDE=("npm:git-split-diffs" "azure-cli")
+
+# Installed with plain `npm -g` below instead. Only mise's npm BACKEND is broken here; npm itself
+# installs these fine, and without git-split-diffs the gitconfig pager falls back to `cat`, so
+# `git vlog` / `git show` lose side-by-side diffs in every sandbox.
+NPM_GLOBAL_TOOLS=(git-split-diffs diff-so-fancy)
 
 log()  { printf '\033[1;35m[personal]\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33m[personal warn]\033[0m %s\n' "$*"; }
@@ -51,7 +56,18 @@ fi
 # because the history is not wanted and because without it chezmoi makes no git calls in the source
 # at all. --delete so a file removed upstream disappears here too.
 SRC_RW="$HOME/.local/share/chezmoi-source"
-if mkdir -p "$SRC_RW" && rsync -a --delete --exclude '.git' "$DOTFILES_DIR"/ "$SRC_RW"/; then
+# Bail out if the mount is missing. The directory still EXISTS when unmounted (the sandbox creates
+# the path), so a -d test passes on an empty dir -- and `rsync --delete` from an empty source then
+# wipes a previously good mirror down to the excluded .git, after which chezmoi manages nothing and
+# silently keeps whatever ~/.gitconfig the first bootstrap wrote. Forever.
+if [ -z "$(ls -A "$DOTFILES_DIR" 2>/dev/null | grep -v '^\.git$' || true)" ]; then
+  warn "$DOTFILES_DIR is empty — dotfiles not mounted into this sandbox."
+  warn "keeping the existing chezmoi mirror; recreate the sandbox with that mount to get updates."
+  SKIP_MIRROR=1
+fi
+if [ "${SKIP_MIRROR:-0}" = 1 ]; then
+  SRC_RW="$SRC_RW"
+elif mkdir -p "$SRC_RW" && rsync -a --delete --exclude '.git' "$DOTFILES_DIR"/ "$SRC_RW"/; then
   log "dotfiles source mirrored to $SRC_RW (the mount is read-only)"
 else
   warn "could not mirror $DOTFILES_DIR — falling back to the read-only mount; chezmoi init may fail"
@@ -98,6 +114,22 @@ else
   mise install "${MINIMAL_TOOLS[@]}" || warn "some tools failed"
 fi
 mise reshim >/dev/null 2>&1 || true
+
+# The diff helpers the gitconfig pager wants. diff-so-fancy comes from the Brewfile on the host,
+# which does not apply in a Linux sandbox, so npm is the only route for both.
+if command -v npm >/dev/null 2>&1; then
+  MISSING_NPM=()
+  for t in "${NPM_GLOBAL_TOOLS[@]}"; do
+    command -v "$t" >/dev/null 2>&1 || MISSING_NPM+=("$t")
+  done
+  if [ "${#MISSING_NPM[@]}" -gt 0 ]; then
+    log "npm -g: ${MISSING_NPM[*]}"
+    npm i -g "${MISSING_NPM[@]}" >/tmp/sbx-npm-global.log 2>&1 \
+      || warn "npm global install failed (see /tmp/sbx-npm-global.log); diffs fall back to plain"
+  fi
+else
+  warn "no npm — git-split-diffs unavailable, diffs fall back to plain output"
+fi
 
 # ---------------------------------------------------------------- shell
 # The base image is bash-only and mise has no zsh, but .zshrc/.p10k.zsh assume zsh + oh-my-zsh +

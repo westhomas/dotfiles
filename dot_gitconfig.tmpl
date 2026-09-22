@@ -4,11 +4,14 @@
 [core]
     excludesfile = ${HOME}/.gitignore_global
     editor = vim
-	pager = git-split-diffs --color | less -RFX
+	# Fall back to plain output where the npm helpers aren't installed (e.g. a Docker
+	# Sandbox, a fresh box, a server) instead of dying with "command not found".
+	# Quoted: an unquoted ';' starts a comment in gitconfig and would truncate the value.
+	pager = "{ command -v git-split-diffs >/dev/null 2>&1 && git-split-diffs --color || cat; } | less -RFX"
 
 # https://github.com/so-fancy/diff-so-fancy
 [interactive]
-    diffFilter = diff-so-fancy --patch
+    diffFilter = "{ command -v diff-so-fancy >/dev/null 2>&1 && diff-so-fancy --patch || cat; }"
 [color "diff-highlight"]
     oldNormal = red bold
     oldHighlight = red bold 52
@@ -46,10 +49,10 @@
     checkout-all-branches = "!for i in `git branch -a | grep remote | grep -v HEAD | grep -v master`; do git checkout ${i#remotes/origin/}; done"
     forcepull = !git diff --quiet --exit-code && git pull --rebase || (git stash && git pull --rebase && git stash pop)
     diff-plain = -c core.pager=\"less -RFX\" diff
-    diff-inline = -c core.pager=\"diff-so-fancy | less --tabs=4 -RFX\" diff
-    view-commit = "!f() { open \"$(git remote get-url origin | sed 's/\\.git$//' | sed 's|git@\\(.*\\):\\(.*\\)|https://\\1/\\2|')/commit/${1:-HEAD}\"; }; f"
+    diff-inline = "-c core.pager=\"{ command -v diff-so-fancy >/dev/null 2>&1 && diff-so-fancy || cat; } | less --tabs=4 -RFX\" diff"
+    view-commit = "!f() { open \"$(git remote get-url origin | sed 's/\\.git$//' | sed 's|git@\\(.*\\):\\(.*\\)|https://\\1/\\2|')/commit/$(git rev-parse --short ${1:-HEAD})\"; }; f"
     vc = !git view-commit
-    logs = -c core.pager=\"diff-so-fancy | less --tabs=4 -RFX\" log -p
+    logs = "-c core.pager=\"{ command -v diff-so-fancy >/dev/null 2>&1 && diff-so-fancy || cat; } | less --tabs=4 -RFX\" log -p"
     last-bcomp = difftool -d HEAD~1..HEAD
 
 [push]
