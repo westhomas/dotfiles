@@ -382,3 +382,27 @@ fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Work around prompt reflow garbage on terminal resize
+# (https://github.com/romkatv/powerlevel10k/issues/175).
+# p10k's first prompt line fills the full width, so when the terminal shrinks it
+# reflows into ceil(old/new) rows, but zsh only moves up one row to redraw it.
+# Remember the width the prompt was drawn at, and on SIGWINCH move the cursor
+# up past the extra reflowed rows, clear below, and redraw.
+typeset -gi _prompt_reflow_old_columns=$COLUMNS
+
+_prompt_reflow_precmd() {
+  _prompt_reflow_old_columns=$COLUMNS
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd _prompt_reflow_precmd
+
+TRAPWINCH() {
+  zle || return 0  # only while editing a command line
+  local -i old=$_prompt_reflow_old_columns new=$COLUMNS
+  (( old > 0 && new > 0 )) || return 0
+  local -i extra_rows=$(( (old + new - 1) / new - 1 ))
+  (( extra_rows > 0 )) && print -n -- "\e[${extra_rows}A\r\e[J"
+  zle reset-prompt
+  _prompt_reflow_old_columns=$new
+}
