@@ -373,6 +373,9 @@ export ECC_CONTEXT_MONITOR_COST_WARNINGS=off
 alias claude-mem='$HOME/.bun/bin/bun "$HOME/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
 alias send-to-claude='$HOME/send-to-claude'
 
+# sentry
+fpath=("$HOME/.local/share/zsh/site-functions" $fpath)
+
 # grok
 if [[ -d $HOME/.grok ]]; then
   export PATH="$HOME/.grok/bin:$PATH"
